@@ -16,8 +16,11 @@
     <color name="ravvisant_light_surfaceVariant">#E7E0EC</color>
     <color name="ravvisant_light_onSurfaceVariant">#49454F</color>
     <color name="ravvisant_light_outline">#79747E</color>
+
+    <color name="ravvisant_warning">#931F1F</color>
+
     <color name="ravvisant_light_surfaceTopBar">#F5F0FF</color>
-    <color name="primary_light">#64D8CB</color>
+
     <!--Modo Dark-->
     <color name="ravvisant_dark_primary">#D0BCFF</color>
     <color name="ravvisant_dark_onPrimary">#381E72</color>
@@ -33,6 +36,10 @@
     <color name="ravvisant_dark_onSurfaceVariant">#CAC4D0</color>
     <color name="ravvisant_dark_outline">#938F99</color>
     <color name="ravvisant_dark_surfaceTopBar">#211F26</color>
+
+
+    <color name="primary">@color/ravvisant_light_primary</color>
+    <color name="primary_light">#64D8CB</color>
 
     <color name="primary_dark">#4A1858</color>
     <color name="primary_soft">#1E293B</color>
