@@ -2,39 +2,58 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <!--Modo light-->
+    <color name="ravvisant_light_primary">#6A287E</color>
+    <color name="ravvisant_light_onPrimary">#FFFFFF</color>
+    <color name="ravvisant_light_primaryContainer">#EADDFF</color>
+    <color name="ravvisant_light_onPrimaryContainer">#21005E</color>
+    <color name="ravvisant_light_secondary">#625B71</color>
+    <color name="ravvisant_light_onSecondary">#FFFFFF</color>
+    <color name="ravvisant_light_secondaryContainer">#E8DEF8</color>
+    <color name="ravvisant_light_onSecondaryContainer">#1D192B</color>
+    <color name="ravvisant_light_surface">#FFFBFF</color>
+    <color name="ravvisant_light_onSurface">#1C1B1F</color>
+    <color name="ravvisant_light_surfaceVariant">#E7E0EC</color>
+    <color name="ravvisant_light_onSurfaceVariant">#49454F</color>
+    <color name="ravvisant_light_outline">#79747E</color>
+    <!--Modo Dark-->
+    <color name="ravvisant_dark_primary">#D0BCFF</color>
+    <color name="ravvisant_dark_onPrimary">#381E72</color>
+    <color name="ravvisant_dark_primaryContainer">#4F378B</color>
+    <color name="ravvisant_dark_onPrimaryContainer">#EADDFF</color>
+    <color name="ravvisant_dark_secondary">#CCC2DC</color>
+    <color name="ravvisant_dark_onSecondary">#332D41</color>
+    <color name="ravvisant_dark_secondaryContainer">#4A4458</color>
+    <color name="ravvisant_dark_onSecondaryContainer">#E8DEF8</color>
+    <color name="ravvisant_dark_surface">#1C1B1F</color>
+    <color name="ravvisant_dark_onSurface">#E6E1E5</color>
+    <color name="ravvisant_dark_surfaceVariant">#49454F</color>
+    <color name="ravvisant_dark_onSurfaceVariant">#CAC4D0</color>
+    <color name="ravvisant_dark_outline">#938F99</color>
 
-    <color name="primary">#002B5C</color>
+
+    <color name="primary">@color/ravvisant_light_primary</color>
     <color name="primary_light">#64D8CB</color>
-    <color name="primary_dark">#001A37</color>
+    <color name="primary_dark">#4A1858</color>
     <color name="primary_soft">#1E293B</color>
-    <color name="button">#6A287E</color>
+    <color name="button">@color/ravvisant_light_primary</color>
     <color name="button2">#4A1858</color>
 
-    <!-- Secondary Colors -->
-    <color name="secondary">#CDD5E4</color>
     <color name="accent">#FBC02D</color>
 
-    <!-- Background Colors -->
-    <color name="background">#121212</color>
-    <color name="background_alt">#222222</color>
+    <color name="background">@color/ravvisant_light_surface</color>
 
-    <!-- Surface and Text Colors -->
-    <color name="card">#1E293B</color>
-    <color name="surface">#1E293B</color>
-    <color name="text">#FFFFFF</color>
-    <color name="text_secondary">#64D8CB</color>
-    <color name="text_muted">#CDD5E4</color>
+    <color name="bottom_nav_selected">@color/ravvisant_light_primary</color>
+    <color name="bottom_nav_unselected">@color/ravvisant_light_onSurfaceVariant</color>
 
-    <!-- Border and Divider -->
-    <color name="border">#1E293B</color>
-    <color name="divider">#333333</color>
 
-    <!-- Shadow -->
-    <color name="shadow">#000000</color>
+    <!-- Colores específicos para la UI de Login -->
+    <color name="text">@color/ravvisant_light_onSurface</color>
+    <color name="text_muted">@color/ravvisant_light_onSurfaceVariant</color>
+    <color name="card">@color/ravvisant_light_surfaceVariant</color>
+    <color name="divider">#4285F4</color>
 
-    <!-- Error, Success, Warning, Info -->
-    <color name="error">#FF5252</color>
-    <color name="success">#4CAF50</color>
-    <color name="warning">#FFC107</color>
-    <color name="info">#2196F3</color>
+
+    <color name="secondary">?attr/colorSecondary</color>
+
 </resources>

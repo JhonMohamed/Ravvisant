@@ -7,4 +7,26 @@
         <item name="shapeAppearance">@style/ShapeAppearance.Material3.Corner.Full</item>
         <item name="color">?attr/colorPrimaryContainer</item>
     </style>
+
+    <style name="Ravvisant.Toolbar" parent="Widget.Material3.Toolbar">
+        <item name="materialThemeOverlay">?attr/colorOnPrimary</item>
+        <item name="titleTextColor">?attr/colorOnSurface</item>
+        <item name="android:background">?attr/colorSurface</item>
+    </style>
+
+    <style name="ThemeOverlay.Ravvisant.Toolbar" parent="">
+        <item name="colorControlNormal">?attr/colorOnPrimary</item>
+        <item name="colorSurface">?attr/colorPrimary</item>
+        <item name="colorOnSurface">?attr/colorOnPrimary</item>
+    </style>
+
+    <!--Boton Google-->
+    <style name="Widget.Ravvisant.Button.Google" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="backgroundTint">@color/divider</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+        <item name="cornerRadius">10dp</item>
+        <item name="iconTint">@null</item>
+        <item name="iconGravity">start</item>
+    </style>
+
 </resources>
