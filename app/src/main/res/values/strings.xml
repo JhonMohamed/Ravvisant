@@ -38,11 +38,16 @@
 
     <!-- Perfil -->
     <string name="edit_profile">Editar perfil</string>
+    <string name="my_pedits">Mis pedidos</string>
     <string name="logout">Cerrar sesión</string>
     <string name="location">Ubicación</string>
+    <string name="notifications">Notificaciones</string>
+    <string name="help">Ayuda y Soporte</string>
+    <string name="theme">Modo Claro</string>
     <string name="update_location">Actualizar ubicación</string>
 
     <!-- Pagos -->
+    <string name="methods_pago">Metodo de Pago</string>
     <string name="pay_with_paypal">Pagar con PayPal</string>
     <string name="payment_success">¡Pago exitoso!</string>
     <string name="payment_failed">Error en el pago</string>

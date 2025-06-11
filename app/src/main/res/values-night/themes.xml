@@ -2,7 +2,7 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.Ravvisant" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Colores primarios -->
-        <item name="colorPrimary">@color/ravvisant_dark_primary</item>
+        <item name="colorPrimary">@color/bottom_nav_selected</item>
         <item name="colorOnPrimary">@color/ravvisant_dark_onPrimary</item>
         <item name="colorPrimaryContainer">@color/ravvisant_dark_primaryContainer</item>
         <item name="colorOnPrimaryContainer">@color/ravvisant_dark_onPrimaryContainer</item>
@@ -13,15 +13,15 @@
         <item name="colorSecondaryContainer">@color/ravvisant_dark_secondaryContainer</item>
         <item name="colorOnSecondaryContainer">@color/ravvisant_dark_onSecondaryContainer</item>
 
+
         <!-- Colores de superficie -->
         <item name="android:colorBackground">@color/ravvisant_dark_surface</item>
-        <item name="colorOnBackground">@color/ravvisant_dark_onSurface</item>
+        <item name="colorOnBackground">#F20000</item>
         <item name="colorSurface">@color/ravvisant_dark_surface</item>
         <item name="colorOnSurface">@color/ravvisant_dark_onSurface</item>
         <item name="colorSurfaceVariant">@color/ravvisant_dark_surfaceVariant</item>
         <item name="colorOnSurfaceVariant">@color/ravvisant_dark_onSurfaceVariant</item>
         <item name="colorOutline">@color/ravvisant_dark_outline</item>
-
         <!-- Barra de estado -->
         <item name="android:statusBarColor">?attr/colorPrimary</item>
         <item name="android:windowLightStatusBar">false</item>

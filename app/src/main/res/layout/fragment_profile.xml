@@ -1,14 +1,533 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    tools:context=".features.profile.ProfileFragment">
+    android:fillViewport="true">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Pagina de Perfil" />
+        android:gravity="center"
+        android:background="@color/ravvisant_dark_secondaryContainer"
+        tools:context=".features.profile.ProfileFragment">
 
-</LinearLayout>
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvTop"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/ravvisant_dark_onSecondary">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/tvProfile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/profile"
+                    android:textStyle="bold"
+                    android:textSize="40dp"
+                    android:textColor="@color/ravvisant_dark_onPrimaryContainer"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/mbtnSetings"
+                    android:layout_width="64dp"
+                    android:backgroundTint="@color/ravvisant_dark_surfaceVariant"
+                    android:layout_height="60dp"
+                    app:icon="@drawable/ic_settings"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    android:layout_marginLeft="300dp" />
+
+                <ImageView
+                    android:id="@+id/ivProfile"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:src="@drawable/img_perfil"
+                    app:layout_constraintTop_toBottomOf="@+id/mbtnSetings" />
+
+                <TextView
+                    android:id="@+id/tvUser"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Usuario Google"
+                    android:textStyle="bold"
+                    android:textSize="20dp"
+                    android:textColor="@color/ravvisant_dark_onSecondaryContainer"
+                    app:layout_constraintTop_toBottomOf="@+id/tvProfile"
+                    android:layout_marginTop="30dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    android:layout_marginLeft="120dp" />
+
+                <TextView
+                    android:id="@+id/tvCorreoUser"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="KchaCabros@gmail.com"
+                    android:textSize="15dp"
+                    android:textColor="@color/ravvisant_dark_onSecondaryContainer"
+                    app:layout_constraintTop_toBottomOf="@+id/tvUser"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    android:layout_marginLeft="120dp" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvShop"
+            android:layout_width="170dp"
+            android:layout_height="80dp"
+            app:cardCornerRadius="10dp"
+            android:backgroundTint="@color/ravvisant_dark_onSecondary"
+            app:layout_constraintTop_toBottomOf="@+id/cvTop"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="40dp">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/ivShop"
+                    android:layout_width="34dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_shop"
+                    android:background="@drawable/bg_circle_shop"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="20dp" />
+                <TextView
+                    android:id="@+id/tvCar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="9"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/ravvisant_dark_onPrimaryContainer"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginLeft="80dp"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="En carrito"
+                    android:textColor="@color/ravvisant_dark_onPrimaryContainer"
+                    app:layout_constraintTop_toBottomOf="@id/tvCar"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    android:layout_marginLeft="80dp"
+                    />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvFavorits"
+            android:layout_width="170dp"
+            android:layout_height="80dp"
+            app:cardCornerRadius="10dp"
+            android:backgroundTint="@color/ravvisant_dark_onSecondary"
+            app:layout_constraintTop_toBottomOf="@+id/cvTop"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="40dp"
+            >
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/ivFavo"
+                    android:layout_width="34dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_love"
+                    android:background="@drawable/bg_circle_red"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="20dp" />
+                <TextView
+                    android:id="@+id/tvFavo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/ravvisant_dark_onPrimaryContainer"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginLeft="80dp"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Favoritos"
+                    android:textColor="@color/ravvisant_dark_onPrimaryContainer"
+                    app:layout_constraintTop_toBottomOf="@id/tvFavo"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    android:layout_marginLeft="80dp"
+                    />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvPedidos"
+            android:layout_width="370dp"
+            android:layout_height="70dp"
+            app:cardCornerRadius="10dp"
+            android:backgroundTint="@color/ravvisant_dark_onSecondary"
+            app:layout_constraintTop_toBottomOf="@+id/cvFavorits"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="40dp">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/ivPedidos"
+                    android:layout_width="34dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_shop"
+                    android:background="@drawable/bg_circle_profile"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="20dp" />
+                <TextView
+                    android:id="@+id/tvPedidos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/my_pedits"
+                    android:textSize="18dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/ravvisant_dark_onPrimaryContainer"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    android:layout_marginTop="28dp"
+                    android:layout_marginLeft="80dp"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="9"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
+                    app:layout_constraintRight_toRightOf="parent"
+                    android:layout_marginRight="10dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center"
+                    android:background="@drawable/bg_circle_shop"
+                    />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvFavoritos"
+            android:layout_width="370dp"
+            android:layout_height="70dp"
+            app:cardCornerRadius="10dp"
+            android:backgroundTint="@color/ravvisant_dark_onSecondary"
+            app:layout_constraintTop_toBottomOf="@+id/cvPedidos"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/ivFavoritos"
+                    android:layout_width="34dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_love"
+                    android:background="@drawable/bg_circle_profile"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="20dp" />
+                <TextView
+                    android:id="@+id/tvFavoritos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/favorites"
+                    android:textSize="18dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/ravvisant_dark_onPrimaryContainer"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    android:layout_marginTop="28dp"
+                    android:layout_marginLeft="80dp"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
+                    app:layout_constraintRight_toRightOf="parent"
+                    android:layout_marginRight="10dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center"
+                    android:background="@drawable/bg_circle_shop"
+                    />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvMetodoPago"
+            android:layout_width="370dp"
+            android:layout_height="70dp"
+            app:cardCornerRadius="10dp"
+            android:backgroundTint="@color/ravvisant_dark_onSecondary"
+            app:layout_constraintTop_toBottomOf="@+id/cvFavoritos"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/ivMetodoPago"
+                    android:layout_width="34dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_tarjeta"
+                    android:background="@drawable/bg_circle_profile"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="20dp" />
+                <TextView
+                    android:id="@+id/tvMetodoPago"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/methods_pago"
+                    android:textSize="18dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/ravvisant_dark_onPrimaryContainer"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    android:layout_marginTop="28dp"
+                    android:layout_marginLeft="80dp"
+                    />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvDirecciones"
+            android:layout_width="370dp"
+            android:layout_height="70dp"
+            app:cardCornerRadius="10dp"
+            android:backgroundTint="@color/ravvisant_dark_onSecondary"
+            app:layout_constraintTop_toBottomOf="@+id/cvMetodoPago"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/ivDireccion"
+                    android:layout_width="34dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_location"
+                    android:background="@drawable/bg_circle_profile"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="20dp" />
+                <TextView
+                    android:id="@+id/tvLocation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/location"
+                    android:textSize="18dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/ravvisant_dark_onPrimaryContainer"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    android:layout_marginTop="28dp"
+                    android:layout_marginLeft="80dp"
+                    />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvNotification"
+            android:layout_width="370dp"
+            android:layout_height="70dp"
+            app:cardCornerRadius="10dp"
+            android:backgroundTint="@color/ravvisant_dark_onSecondary"
+            app:layout_constraintTop_toBottomOf="@+id/cvDirecciones"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/ivNotification"
+                    android:layout_width="34dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_notification"
+                    android:background="@drawable/bg_circle_profile"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="20dp" />
+                <TextView
+                    android:id="@+id/tvNotification"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/notifications"
+                    android:textSize="18dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/ravvisant_dark_onPrimaryContainer"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    android:layout_marginTop="28dp"
+                    android:layout_marginLeft="80dp"
+                    />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvHelp"
+            android:layout_width="370dp"
+            android:layout_height="70dp"
+            app:cardCornerRadius="10dp"
+            android:backgroundTint="@color/ravvisant_dark_onSecondary"
+            app:layout_constraintTop_toBottomOf="@+id/cvNotification"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/ivHelp"
+                    android:layout_width="34dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_help"
+                    android:background="@drawable/bg_circle_profile"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="20dp" />
+                <TextView
+                    android:id="@+id/tvHelp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/help"
+                    android:textSize="18dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/ravvisant_dark_onPrimaryContainer"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    android:layout_marginTop="28dp"
+                    android:layout_marginLeft="80dp"
+                    />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvTema"
+            android:layout_width="370dp"
+            android:layout_height="70dp"
+            app:cardCornerRadius="10dp"
+            android:backgroundTint="@color/ravvisant_dark_onSecondary"
+            app:layout_constraintTop_toBottomOf="@+id/cvHelp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/ivTema"
+                    android:layout_width="34dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_sun"
+                    android:background="@drawable/bg_circle_profile"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="20dp" />
+                <TextView
+                    android:id="@+id/tvTema"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/theme"
+                    android:textSize="18dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/ravvisant_dark_onPrimaryContainer"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    android:layout_marginTop="28dp"
+                    android:layout_marginLeft="80dp"
+                    />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvExit"
+            android:layout_width="370dp"
+            android:layout_height="70dp"
+            app:cardCornerRadius="10dp"
+            android:backgroundTint="@color/ravvisant_warning"
+            app:layout_constraintTop_toBottomOf="@+id/cvTema"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginLeft="20dp"
+            android:layout_marginBottom="50dp"
+            android:layout_marginTop="10dp">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/ivExit"
+                    android:layout_width="34dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_exit"
+                    android:background="@drawable/bg_circle_red"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="20dp" />
+                <TextView
+                    android:id="@+id/tvExit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/theme"
+                    android:textSize="18dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/ravvisant_dark_onPrimaryContainer"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    android:layout_marginTop="28dp"
+                    android:layout_marginLeft="80dp"
+                    />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
