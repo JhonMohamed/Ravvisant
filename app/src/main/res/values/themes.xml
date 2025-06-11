@@ -27,9 +27,7 @@
         <item name="colorSurfaceTopBar">@color/ravvisant_light_surfaceTopBar</item>
 
     </style>
-
     <!-- Herencia para mantener compatibilidad -->
     <style name="Theme.JRavvisant" parent="Base.Theme.Ravvisant" />
-
     <style name="Base.Theme.JRavvisant" parent="Base.Theme.Ravvisant" />
 </resources>
