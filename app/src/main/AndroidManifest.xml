@@ -13,6 +13,12 @@
         android:theme="@style/Theme.JRavvisant"
         tools:targetApi="31">
         <activity
+            android:name=".screens.NavigationButtonActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MainActivity"
+            android:exported="false" />
+        <activity
             android:name=".features.auth.presentation.LoginActivity"
             android:exported="true">
             <intent-filter>
@@ -21,7 +27,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".features.auth.presentation.RegisterActivity"></activity>
+        <activity android:name=".features.auth.presentation.RegisterActivity" />
     </application>
 
 </manifest>
