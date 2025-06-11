@@ -24,6 +24,7 @@
         <!-- Barra de estado -->
         <item name="android:statusBarColor">?attr/colorPrimary</item>
         <item name="android:windowLightStatusBar">false</item>
+        <item name="colorSurfaceTopBar">@color/ravvisant_dark_surfaceTopBar</item>
     </style>
 
     <style name="Base.Theme.JRavvisant" parent="Base.Theme.Ravvisant" />
