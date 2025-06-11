@@ -1,7 +1,7 @@
 <resources>
     <style name="Base.Theme.Ravvisant" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Colores primarios -->
-        <item name="colorPrimary">@color/bottom_nav_selected</item>
+        <item name="colorPrimary">@color/bottom_nav_selector</item>
         <item name="colorOnPrimary">@color/ravvisant_dark_onPrimary</item>
         <item name="colorPrimaryContainer">@color/ravvisant_dark_primaryContainer</item>
         <item name="colorOnPrimaryContainer">@color/ravvisant_dark_onPrimaryContainer</item>
