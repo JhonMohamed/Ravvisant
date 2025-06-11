@@ -25,22 +25,17 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Configurar la barra superior
         val toolbarTitle = view.findViewById<TextView>(R.id.toolbarTitle)
         val btnAction = view.findViewById<ImageButton>(R.id.btnAction)
         val toolbar = view.findViewById<MaterialToolbar>(R.id.toolbar)
 
-        // Configurar título
         toolbarTitle?.text = "Perfil"
 
-        // Ocultar botón de acción
         btnAction?.visibility = View.GONE
 
-        // Si estamos en navegación principal (bottom nav), ocultar botón atrás
         if (isInBottomNavigation()) {
             toolbar?.navigationIcon = null
         } else {
-            // Configurar navegación hacia atrás
             toolbar?.setNavigationOnClickListener {
                 findNavController().navigateUp()
             }

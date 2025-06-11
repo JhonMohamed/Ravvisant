@@ -31,10 +31,8 @@ class CartShopFragment : Fragment() {
         val btnAction = view.findViewById<ImageButton>(R.id.btnAction)
         val toolbar = view.findViewById<MaterialToolbar>(R.id.toolbar)
 
-        // Configurar título
         toolbarTitle?.text = "Carrito"
 
-        // Configurar icono de acción (basura)
         btnAction?.apply {
             visibility = View.VISIBLE
             setImageResource(R.drawable.ic_trash)
@@ -44,11 +42,9 @@ class CartShopFragment : Fragment() {
             }
         }
 
-        // Si estamos en navegación principal (bottom nav), ocultar botón atrás
         if (isInBottomNavigation()) {
             toolbar?.navigationIcon = null
         } else {
-            // Configurar navegación hacia atrás
             toolbar?.setNavigationOnClickListener {
                 findNavController().navigateUp()
             }
