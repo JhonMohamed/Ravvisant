@@ -1,5 +1,4 @@
 <resources>
-    <!-- Base application theme. -->
     <style name="Base.Theme.Ravvisant" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Colores primarios -->
         <item name="colorPrimary">@color/ravvisant_dark_primary</item>
@@ -25,6 +24,7 @@
         <!-- Barra de estado -->
         <item name="android:statusBarColor">?attr/colorPrimary</item>
         <item name="android:windowLightStatusBar">false</item>
+        <item name="colorSurfaceTopBar">@color/ravvisant_dark_surfaceTopBar</item>
     </style>
 
     <style name="Base.Theme.JRavvisant" parent="Base.Theme.Ravvisant" />
