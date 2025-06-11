@@ -8,8 +8,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="40dp"
-        android:background="?attr/colorSurface">
+        android:background="?attr/colorSurface"
+        android:padding="40dp">
 
         <ImageView
             android:id="@+id/ivLogo"
@@ -102,7 +102,7 @@
                 android:textSize="15sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnLogin"
             style="@style/Widget.Material3.Button"
             android:layout_width="match_parent"
@@ -162,17 +162,14 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnGoogle"
-            style="@style/Widget.Material3.Button.OutlinedButton"
+            style="@style/Widget.Ravvisant.Button.Google"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginTop="20dp"
-            android:backgroundTint="@color/divider"
             android:text="@string/enteryour_account_google"
-            android:textColor="?attr/colorOnPrimary"
-            app:cornerRadius="10dp"
-            app:icon="@drawable/ic_chrome"
-            app:iconGravity="start"
-            app:iconTint="@null"
+            app:icon="@drawable/ic_google"
+            app:iconPadding="8dp"
+            app:iconSize="24dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/linearLayoutWithText" />
 

@@ -16,7 +16,11 @@
     <color name="ravvisant_light_surfaceVariant">#E7E0EC</color>
     <color name="ravvisant_light_onSurfaceVariant">#49454F</color>
     <color name="ravvisant_light_outline">#79747E</color>
+
     <color name="ravvisant_warning">#931F1F</color>
+
+    <color name="ravvisant_light_surfaceTopBar">#F5F0FF</color>
+
     <!--Modo Dark-->
     <color name="ravvisant_dark_primary">#D0BCFF</color>
     <color name="ravvisant_dark_onPrimary">#381E72</color>
@@ -31,29 +35,17 @@
     <color name="ravvisant_dark_surfaceVariant">#49454F</color>
     <color name="ravvisant_dark_onSurfaceVariant">#CAC4D0</color>
     <color name="ravvisant_dark_outline">#938F99</color>
+    <color name="ravvisant_dark_surfaceTopBar">#211F26</color>
+
 
     <color name="primary">@color/ravvisant_light_primary</color>
     <color name="primary_light">#64D8CB</color>
+
     <color name="primary_dark">#4A1858</color>
     <color name="primary_soft">#1E293B</color>
-    <color name="button">@color/ravvisant_light_primary</color>
-    <color name="button2">#4A1858</color>
 
     <color name="accent">#FBC02D</color>
-
-    <color name="background">@color/ravvisant_light_surface</color>
-
-    <color name="bottom_nav_selected">@color/ravvisant_light_primary</color>
-    <color name="bottom_nav_unselected">@color/ravvisant_light_onSurfaceVariant</color>
-
-
-    <!-- Colores específicos para la UI de Login -->
-    <color name="text">@color/ravvisant_light_onSurface</color>
-    <color name="text_muted">@color/ravvisant_light_onSurfaceVariant</color>
-    <color name="card">@color/ravvisant_light_surfaceVariant</color>
     <color name="divider">#4285F4</color>
 
-
-    <color name="secondary">?attr/colorSecondary</color>
 
 </resources>

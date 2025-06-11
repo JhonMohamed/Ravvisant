@@ -30,16 +30,16 @@ class MainActivity : AppCompatActivity() {
             )
         )
 
-        val toolbar = findViewById<MaterialToolbar>(R.id.toolbar)
-        setSupportActionBar(toolbar)
-        setupActionBarWithNavController(navController, appBarConfiguration)
-
-        supportActionBar?.setDisplayShowTitleEnabled(false)
-
-        val toolbarTitle = toolbar.findViewById<TextView>(R.id.toolbarTitle)
-        navController.addOnDestinationChangedListener { _, destination, _ ->
-            toolbarTitle.text = destination.label
-        }
+//        val toolbar = findViewById<MaterialToolbar>(R.id.toolbar)
+//        setSupportActionBar(toolbar)
+//        setupActionBarWithNavController(navController, appBarConfiguration)
+//
+//        supportActionBar?.setDisplayShowTitleEnabled(false)
+//
+//        val toolbarTitle = toolbar.findViewById<TextView>(R.id.toolbarTitle)
+//        navController.addOnDestinationChangedListener { _, destination, _ ->
+//            toolbarTitle.text = destination.label
+//        }
 
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         bottomNav.setupWithNavController(navController)
