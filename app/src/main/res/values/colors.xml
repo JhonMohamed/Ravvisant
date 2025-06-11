@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="primary">#002B5C</color>
+    <color name="primary_light">#64D8CB</color>
+    <color name="primary_dark">#001A37</color>
+    <color name="primary_soft">#1E293B</color>
+    <color name="button">#6A287E</color>
+
+    <!-- Secondary Colors -->
+    <color name="secondary">#CDD5E4</color>
+    <color name="accent">#FBC02D</color>
+
+    <!-- Background Colors -->
+    <color name="background">#121212</color>
+    <color name="background_alt">#222222</color>
+
+    <!-- Surface and Text Colors -->
+    <color name="card">#1E293B</color>
+    <color name="surface">#1E293B</color>
+    <color name="text">#FFFFFF</color>
+    <color name="text_secondary">#64D8CB</color>
+    <color name="text_muted">#CDD5E4</color>
+
+    <!-- Border and Divider -->
+    <color name="border">#1E293B</color>
+    <color name="divider">#333333</color>
+
+    <!-- Shadow -->
+    <color name="shadow">#000000</color>
+
+    <!-- Error, Success, Warning, Info -->
+    <color name="error">#FF5252</color>
+    <color name="success">#4CAF50</color>
+    <color name="warning">#FFC107</color>
+    <color name="info">#2196F3</color>
+</resources>

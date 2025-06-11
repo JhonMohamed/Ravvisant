@@ -1,0 +1,60 @@
+<resources>
+    <string name="app_name">Ravvisant</string>
+    <string name="name_app">Jewelry Яavvisant</string>
+
+    <!-- Login & Register -->
+    <string name="login">Iniciar Sesión</string>
+    <string name="register">Registrate</string>
+    <string name="email">Correo electrónico</string>
+    <string name="password">Contraseña</string>
+    <string name="full_name">Nombre Completo</string>
+    <string name="enteryour_account">Ingresa a tu cuenta</string>
+    <string name="create_account">Crear Cuenta</string>
+    <string name="enteryour_account_google">Continuar con Google</string>
+    <string name="confirm_password">Confirmar contraseña</string>
+    <string name="forgot_password">¿Olvidaste tu contraseña?</string>
+    <string name="already_have_account">¿Ya tienes una cuenta?</string>
+    <string name="dont_have_account">¿No tienes cuenta?</string>
+
+    <!-- Navegación -->
+    <string name="home">Inicio</string>
+    <string name="buscar">Buscar</string>
+    <string name="favorites">Favoritos</string>
+    <string name="cart">Carrito</string>
+    <string name="profile">Perfil</string>
+
+    <!-- Categorías -->
+    <string name="category_rings">Anillos</string>
+    <string name="category_necklaces">Collares</string>
+    <string name="category_earrings">Aretes</string>
+    <string name="category_bracelets">Pulseras</string>
+
+    <!-- Carrito -->
+    <string name="add_to_cart">Agregar al carrito</string>
+    <string name="remove_from_cart">Eliminar del carrito</string>
+    <string name="checkout">Pagar</string>
+    <string name="empty_cart">Tu carrito está vacío</string>
+    <string name="total">Total:</string>
+
+    <!-- Perfil -->
+    <string name="edit_profile">Editar perfil</string>
+    <string name="logout">Cerrar sesión</string>
+    <string name="location">Ubicación</string>
+    <string name="update_location">Actualizar ubicación</string>
+
+    <!-- Pagos -->
+    <string name="pay_with_paypal">Pagar con PayPal</string>
+    <string name="payment_success">¡Pago exitoso!</string>
+    <string name="payment_failed">Error en el pago</string>
+
+    <!-- Validaciones / Errores -->
+    <string name="field_required">Este campo es obligatorio</string>
+    <string name="invalid_email">Correo no válido</string>
+    <string name="passwords_do_not_match">Las contraseñas no coinciden</string>
+    <string name="min_password_length">Mínimo 6 caracteres</string>
+
+    <!-- Misceláneo -->
+    <string name="search">Buscar</string>
+    <string name="loading">Cargando...</string>
+    <string name="try_again">Intenta nuevamente</string>
+</resources>
