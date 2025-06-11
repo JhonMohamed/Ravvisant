@@ -19,14 +19,19 @@
         <item name="colorSurface">?attr/colorPrimary</item>
         <item name="colorOnSurface">?attr/colorOnPrimary</item>
     </style>
-
-    <!--Boton Google-->
+    <!--Boton Google -->
     <style name="Widget.Ravvisant.Button.Google" parent="Widget.Material3.Button.OutlinedButton">
-        <item name="backgroundTint">@color/divider</item>
-        <item name="android:textColor">?attr/colorOnPrimary</item>
+        <item name="backgroundTint">?attr/colorSurface</item>
+        <item name="strokeColor">?attr/colorOutline</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
         <item name="cornerRadius">10dp</item>
         <item name="iconTint">@null</item>
         <item name="iconGravity">start</item>
+        <item name="iconPadding">8dp</item>
+        <item name="iconSize">24dp</item>
+        <item name="android:elevation">1dp</item>
+        <item name="rippleColor">?attr/colorPrimaryContainer</item>
     </style>
 
 </resources>

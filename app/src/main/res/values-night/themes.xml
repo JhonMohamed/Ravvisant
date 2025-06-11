@@ -1,5 +1,4 @@
 <resources>
-    <!-- Base application theme. -->
     <style name="Base.Theme.Ravvisant" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Colores primarios -->
         <item name="colorPrimary">@color/ravvisant_dark_primary</item>
