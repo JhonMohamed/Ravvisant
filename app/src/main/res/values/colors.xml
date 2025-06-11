@@ -8,6 +8,7 @@
     <color name="primary_dark">#001A37</color>
     <color name="primary_soft">#1E293B</color>
     <color name="button">#6A287E</color>
+    <color name="button2">#4A1858</color>
 
     <!-- Secondary Colors -->
     <color name="secondary">#CDD5E4</color>
