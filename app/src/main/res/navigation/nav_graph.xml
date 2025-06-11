@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.proyect.ravvisant.features.home.HomeFragment"
+        android:label="Inicio" />
+
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.proyect.ravvisant.features.product.ProductFragment"
+        android:label="Productos" />
+
+    <fragment
+        android:id="@+id/cartFragment"
+        android:name="com.proyect.ravvisant.features.cart.CartShopFragment"
+        android:label="Carrito" />
+
+    <fragment
+        android:id="@+id/favoriteFragment"
+        android:name="com.proyect.ravvisant.features.favorites.FavoriteFragment"
+        android:label="Favoritos" />
+
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.proyect.ravvisant.features.profile.ProfileFragment"
+        android:label="Perfil" />
+
+<!--    <fragment-->
+<!--        android:id="@+id/productFragment"-->
+<!--        android:name="com.proyect.ravvisant.features.product.ProductFragment"-->
+<!--        android:label="Producto" />-->
+
+</navigation>

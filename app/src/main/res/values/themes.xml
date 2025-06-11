@@ -1,9 +1,34 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
-    <style name="Base.Theme.JRavvisant" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    <style name="Base.Theme.Ravvisant" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Colores primarios -->
+        <item name="colorPrimary">@color/ravvisant_light_primary</item>
+        <item name="colorOnPrimary">@color/ravvisant_light_onPrimary</item>
+        <item name="colorPrimaryContainer">@color/ravvisant_light_primaryContainer</item>
+        <item name="colorOnPrimaryContainer">@color/ravvisant_light_onPrimaryContainer</item>
+
+        <!-- Colores secundarios -->
+        <item name="colorSecondary">@color/ravvisant_light_secondary</item>
+        <item name="colorOnSecondary">@color/ravvisant_light_onSecondary</item>
+        <item name="colorSecondaryContainer">@color/ravvisant_light_secondaryContainer</item>
+        <item name="colorOnSecondaryContainer">@color/ravvisant_light_onSecondaryContainer</item>
+
+        <!-- Colores de superficie -->
+        <item name="android:colorBackground">@color/ravvisant_light_surface</item>
+        <item name="colorOnBackground">@color/ravvisant_light_onSurface</item>
+        <item name="colorSurface">@color/ravvisant_light_surface</item>
+        <item name="colorOnSurface">@color/ravvisant_light_onSurface</item>
+        <item name="colorSurfaceVariant">@color/ravvisant_light_surfaceVariant</item>
+        <item name="colorOnSurfaceVariant">@color/ravvisant_light_onSurfaceVariant</item>
+        <item name="colorOutline">@color/ravvisant_light_outline</item>
+
+        <!-- Barra de estado -->
+        <item name="android:statusBarColor">?attr/colorPrimary</item>
+        <item name="android:windowLightStatusBar">false</item>
     </style>
 
-    <style name="Theme.JRavvisant" parent="Base.Theme.JRavvisant" />
+    <!-- Herencia para mantener compatibilidad -->
+    <style name="Theme.JRavvisant" parent="Base.Theme.Ravvisant" />
+
+    <style name="Base.Theme.JRavvisant" parent="Base.Theme.Ravvisant" />
 </resources>

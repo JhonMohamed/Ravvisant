@@ -14,6 +14,8 @@ services ="4.4.2"
 crashlytics ="3.0.2"
 firebase-analytics = "21.6.1"
 firebase-crashlytics-gradle = "2.9.9"
+navigationFragmentKtx = "2.9.0"
+navigationUiKtx = "2.9.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -28,6 +30,8 @@ firebase-bom = {module= "com.google.firebase:firebase-bom",version.ref="firebase
 firebase-crashlytics={module ="com.google.firebase:firebase-crashlytics"}
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics", version.ref = "firebase-analytics" }
 firebase-auth={module="com.google.firebase:firebase-auth-ktx"}
+androidx-navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigationFragmentKtx" }
+androidx-navigation-ui-ktx = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigationUiKtx" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
