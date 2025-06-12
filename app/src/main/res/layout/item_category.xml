@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="category"
+            type="com.proyect.ravvisant.data.model.Category" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cvCategory"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="4dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="12dp"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/imgIcon"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:scaleType="centerCrop"
+                app:imageUrl="@{category.iconUrl}"
+                tools:src="@drawable/ic_launcher_background" />
+
+            <TextView
+                android:id="@+id/tvName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@{category.name}"
+                android:textSize="14sp"
+                android:layout_marginTop="8dp"
+                android:textStyle="bold"
+                tools:text="Joyería" />
+
+            <TextView
+                android:id="@+id/tvCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@{String.valueOf(category.itemCount)}"
+                android:textSize="12sp"
+                android:layout_marginTop="4dp"
+                tools:text="156" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</layout>
