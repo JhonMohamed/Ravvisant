@@ -27,7 +27,12 @@ class ProductViewModel : ViewModel() {
                 price = 149.99,
                 rating = 4.7f,
                 stock = 18,
-                imageUrl = "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg"
+                imageUrls = listOf(
+                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
+                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
+                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
+                ),
+                description = "description product 1"
             ),
             Product(
                 id = "2",
@@ -36,7 +41,12 @@ class ProductViewModel : ViewModel() {
                 price = 120.0,
                 rating = 4.5f,
                 stock = 10,
-                imageUrl = "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609106/reloj_cronos_verde_ad2ejo.webp"
+                imageUrls = listOf(
+                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609106/reloj_cronos_verde_ad2ejo.webp",
+                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609106/reloj_cronos_verde_ad2ejo.webp",
+                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609106/reloj_cronos_verde_ad2ejo.webp",
+                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609106/reloj_cronos_verde_ad2ejo.webp",
+                ), description = "Descripcion for product two"
             ),
             // Añade más productos aquí
             Product(
@@ -46,7 +56,12 @@ class ProductViewModel : ViewModel() {
                 price = 14500.0,
                 rating = 4.9f,
                 stock = 5,
-                imageUrl = "https://res.cloudinary.com/dljanm8ai/image/upload/v1749615153/rolex_starbucks3_djf9vt.jpg"
+                imageUrls = listOf(
+                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749615153/rolex_starbucks3_djf9vt.jpg",
+                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749615153/rolex_starbucks3_djf9vt.jpg",
+                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749615153/rolex_starbucks3_djf9vt.jpg",
+                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749615153/rolex_starbucks3_djf9vt.jpg",
+                ), description = "descriptipn for product 3"
             ),
             Product(
                 id = "4",
@@ -55,7 +70,13 @@ class ProductViewModel : ViewModel() {
                 price = 31000.0,
                 rating = 4.8f,
                 stock = 3,
-                imageUrl = "https://res.cloudinary.com/dljanm8ai/image/upload/v1749615156/reloj_ap_royal3_je9qhm.jpg"
+                imageUrls = listOf(
+                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749615156/reloj_ap_royal3_je9qhm.jpg",
+                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749615156/reloj_ap_royal3_je9qhm.jpg",
+                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749615156/reloj_ap_royal3_je9qhm.jpg",
+                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749615156/reloj_ap_royal3_je9qhm.jpg",
+                ),
+                description = "Este elegante reloj Patek Philippe Nautilus está fabricado con los mejores materiales y ofrece precisión y estilo incomparables."
             ),
             Product(
                 id = "5",
@@ -64,7 +85,12 @@ class ProductViewModel : ViewModel() {
                 price = 70000.0,
                 rating = 5.0f,
                 stock = 2,
-                imageUrl = "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg"
+                imageUrls = listOf(
+                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
+                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
+                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
+                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
+                ), description = "Description for product 4"
             )
         )
         _products.value = sampleProducts

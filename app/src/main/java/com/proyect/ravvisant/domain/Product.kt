@@ -7,6 +7,10 @@ data class Product(
     val price: Double = 0.0,
     val rating: Float = 0f,
     val stock: Int = 0,
-    val imageUrl: String = "",
+    val imageUrls: List<String> = listOf(),
+    val description: String = "",
     val isFavorite: Boolean = false
-)
+) {
+    val imageUrl: String
+        get() = if (imageUrls.isNotEmpty()) imageUrls[0] else ""
+}
