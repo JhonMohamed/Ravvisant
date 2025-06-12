@@ -9,49 +9,63 @@
             type="com.proyect.ravvisant.data.model.Category" />
     </data>
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/cvCategory"
-        android:layout_width="100dp"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        app:cardCornerRadius="12dp"
-        app:cardElevation="4dp">
+        android:layout_margin="6dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="2dp"
+        app:strokeWidth="0dp"
+        style="@style/Widget.Material3.CardView.Elevated">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="12dp"
-            android:gravity="center">
+            android:padding="12dp">
 
-            <ImageView
+            <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/imgIcon"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
                 android:scaleType="centerCrop"
                 app:imageUrl="@{category.iconUrl}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CircleImageView"
                 tools:src="@drawable/ic_launcher_background" />
 
             <TextView
                 android:id="@+id/tvName"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:ellipsize="end"
                 android:gravity="center"
+                android:maxLines="1"
                 android:text="@{category.name}"
                 android:textSize="14sp"
-                android:layout_marginTop="8dp"
                 android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/imgIcon"
                 tools:text="Joyería" />
 
             <TextView
                 android:id="@+id/tvCount"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@{String.valueOf(category.itemCount)}"
-                android:textSize="12sp"
                 android:layout_marginTop="4dp"
-                tools:text="156" />
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
+                android:gravity="center"
+                android:text='@{category.itemCount + " productos"}'
+                android:textColor="?attr/colorPrimary"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvName"
+                tools:text="156 productos" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
 </layout>

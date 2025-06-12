@@ -12,6 +12,15 @@ class HomeViewModel : ViewModel() {
 
     private val _categories = MutableStateFlow<List<Category>>(emptyList())
     val categories: StateFlow<List<Category>> = _categories
+    fun toggleFavorite(product: Product) {
+        val currentProducts = _products.value.toMutableList()
+        val index = currentProducts.indexOfFirst { it.id == product.id }
+        if (index != -1) {
+            val updatedProduct = product.copy(isFavorite = !product.isFavorite)
+            currentProducts[index] = updatedProduct
+            _products.value = currentProducts
+        }
+    }
 
     init {
         val sampleProducts = listOf(
@@ -32,6 +41,78 @@ class HomeViewModel : ViewModel() {
                 rating = 4.5f,
                 stock = 10,
                 imageUrl = "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609106/reloj_cronos_verde_ad2ejo.webp"
+            ),
+            Product(
+                id = "3",
+                name = "Dior Sauvage",
+                brand = "Dior",
+                price = 120.0,
+                rating = 4.5f,
+                stock = 10,
+                imageUrl = "https://res.cloudinary.com/dljanm8ai/image/upload/v1749615153/rolex_starbucks3_djf9vt.jpg"
+            ),
+            Product(
+                id = "4",
+                name = "Dior Sauvage",
+                brand = "Dior",
+                price = 120.0,
+                rating = 4.5f,
+                stock = 10,
+                imageUrl = "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609106/reloj_cronos_verde_ad2ejo.webp"
+            ),
+            Product(
+                id = "5",
+                name = "Dior Sauvage",
+                brand = "Dior",
+                price = 120.0,
+                rating = 4.5f,
+                stock = 10,
+                imageUrl = "https://res.cloudinary.com/dljanm8ai/image/upload/v1749615155/rolex_starbucks_w0f2co.webp"
+            ),
+            Product(
+                id = "6",
+                name = "Dior Sauvage",
+                brand = "Dior",
+                price = 120.0,
+                rating = 4.5f,
+                stock = 10,
+                imageUrl = "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609106/reloj_cronos_verde_ad2ejo.webp"
+            ),
+            Product(
+                id = "7",
+                name = "Dior Sauvage",
+                brand = "Dior",
+                price = 120.0,
+                rating = 4.5f,
+                stock = 10,
+                imageUrl = "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_crono_verde_3_xl8s6w.jpg"
+            ),
+            Product(
+                id = "8",
+                name = "Dior Sauvage",
+                brand = "Dior",
+                price = 120.0,
+                rating = 4.5f,
+                stock = 10,
+                imageUrl = "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_crono_verde_3_xl8s6w.jpg"
+            ),
+            Product(
+                id = "9",
+                name = "Dior Sauvage",
+                brand = "Dior",
+                price = 120.0,
+                rating = 4.5f,
+                stock = 10,
+                imageUrl = "https://res.cloudinary.com/dljanm8ai/image/upload/v1749615155/rolex_starbucks_w0f2co.webp"
+            ),
+            Product(
+                id = "10",
+                name = "Dior Sauvage",
+                brand = "Dior",
+                price = 120.0,
+                rating = 4.5f,
+                stock = 10,
+                imageUrl = "https://res.cloudinary.com/dljanm8ai/image/upload/v1749615156/reloj_ap_royal3_je9qhm.jpg"
             )
         )
         _products.value = sampleProducts

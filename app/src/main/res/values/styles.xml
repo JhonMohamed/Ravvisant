@@ -37,4 +37,9 @@
         <item name="rippleColor">?attr/colorPrimaryContainer</item>
     </style>
 
+    <!--    Card Categorie home-->
+    <style name="ShapeAppearanceOverlay.App.CircleImageView" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
 </resources>

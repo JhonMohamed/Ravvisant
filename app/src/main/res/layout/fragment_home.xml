@@ -1,11 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:fitsSystemWindows="true"
+        android:layout_height="match_parent">
 
         <include
             android:id="@+id/topBar"
@@ -20,40 +21,52 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:orientation="horizontal"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintTop_toBottomOf="@id/topBar" />
 
         <LinearLayout
-
+            android:id="@+id/titleLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingHorizontal="18dp">
+            android:paddingHorizontal="18dp"
+            android:paddingVertical="8dp"
+            app:layout_constraintTop_toBottomOf="@id/rvCategories">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Mas Productos" />
+                android:text="Mas Productos"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Ver mas"
-                android:textAlignment="viewEnd" />
+                android:text="Ver más"
+                android:textAlignment="viewEnd"
+                android:textColor="?attr/colorPrimary" />
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvProducts"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            android:padding="16dp" />
+            android:padding="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/titleLayout" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabCart"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end|bottom"
             android:layout_margin="16dp"
-            android:contentDescription="TODO"
-            android:src="@drawable/ic_car" />
-    </LinearLayout>
+            android:contentDescription="Carrito de compras"
+            android:src="@drawable/ic_car"
+            app:backgroundTint="?attr/colorPrimary"
+            app:fabSize="normal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:tint="@android:color/white" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

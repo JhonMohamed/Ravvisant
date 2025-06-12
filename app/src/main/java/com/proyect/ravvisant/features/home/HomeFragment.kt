@@ -12,9 +12,11 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.proyect.ravvisant.R
 import com.proyect.ravvisant.databinding.FragmentHomeBinding
+import com.proyect.ravvisant.domain.Product
 import com.proyect.ravvisant.features.categories.CategoryAdapter
 import com.proyect.ravvisant.features.home.adapters.HomeViewModel
 import com.proyect.ravvisant.features.home.adapters.ProductAdapter
+import com.proyect.ravvisant.features.home.adapters.ProductClickCallback
 import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
@@ -43,13 +45,22 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupProductRecyclerView() {
-        adapter = ProductAdapter()
+        val productCallback = object : ProductClickCallback {
+            override fun onFavoriteClick(product: Product) {
+                viewModel.toggleFavorite(product)
+            }
+
+            override fun onAddToCartClick(product: Product) {
+                viewModel.addToCart(product)
+            }
+        }
+
+        adapter = ProductAdapter(productCallback)
         binding.rvProducts.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = this@HomeFragment.adapter
         }
     }
-
     private fun setupCategoryRecyclerView() {
         categoryAdapter = CategoryAdapter()
         binding.rvCategories.apply {

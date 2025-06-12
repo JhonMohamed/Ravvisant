@@ -11,7 +11,8 @@ import com.proyect.ravvisant.domain.Product
 import com.proyect.ravvisant.R
 import com.proyect.ravvisant.utils.diff.ProductDiffCallback
 
-class ProductAdapter : ListAdapter<Product, HomeProductViewHolder>(ProductDiffCallback()) {
+class ProductAdapter(private val callback: ProductClickCallback? = null) :
+    ListAdapter<Product, HomeProductViewHolder>(ProductDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeProductViewHolder {
         val binding = DataBindingUtil.inflate<ItemProductBinding>(
@@ -20,6 +21,7 @@ class ProductAdapter : ListAdapter<Product, HomeProductViewHolder>(ProductDiffCa
             parent,
             false
         )
+        binding.callback = callback
         return HomeProductViewHolder(binding)
     }
 
