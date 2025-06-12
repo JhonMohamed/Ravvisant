@@ -14,15 +14,15 @@ import com.proyect.ravvisant.R
 import com.proyect.ravvisant.databinding.FragmentHomeBinding
 import com.proyect.ravvisant.domain.Product
 import com.proyect.ravvisant.features.categories.CategoryAdapter
+import com.proyect.ravvisant.features.home.adapters.HomeProductAdapter
 import com.proyect.ravvisant.features.home.adapters.HomeViewModel
-import com.proyect.ravvisant.features.home.adapters.ProductAdapter
 import com.proyect.ravvisant.features.home.adapters.ProductClickCallback
 import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
     private lateinit var viewModel: HomeViewModel
-    private lateinit var adapter: ProductAdapter
+    private lateinit var adapter: HomeProductAdapter
     private lateinit var categoryAdapter: CategoryAdapter
 
 
@@ -55,7 +55,7 @@ class HomeFragment : Fragment() {
             }
         }
 
-        adapter = ProductAdapter(productCallback)
+        adapter = HomeProductAdapter(productCallback)
         binding.rvProducts.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = this@HomeFragment.adapter
