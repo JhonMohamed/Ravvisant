@@ -9,6 +9,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.proyect.ravvisant.R
 import com.proyect.ravvisant.databinding.FragmentHomeBinding
@@ -52,6 +53,12 @@ class HomeFragment : Fragment() {
 
             override fun onAddToCartClick(product: Product) {
                 viewModel.addToCart(product)
+            }
+
+            override fun onProductClick(product: Product) {
+                val bundle = Bundle()
+                bundle.putString("productId", product.id)
+                findNavController().navigate(R.id.productDetailFragment, bundle)
             }
         }
 
