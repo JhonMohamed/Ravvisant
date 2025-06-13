@@ -31,7 +31,12 @@ class HomeViewModel : ViewModel() {
                 price = 149.99,
                 rating = 4.7f,
                 stock = 18,
-                imageUrl = "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg"
+                imageUrls = listOf(
+                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
+                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
+                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
+                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
+                )
             ),
             Product(
                 id = "2",
@@ -40,7 +45,12 @@ class HomeViewModel : ViewModel() {
                 price = 120.0,
                 rating = 4.5f,
                 stock = 10,
-                imageUrl = "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609106/reloj_cronos_verde_ad2ejo.webp"
+                imageUrls = listOf(
+                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
+                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
+                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
+                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
+                )
             ),
             Product(
                 id = "3",
@@ -49,7 +59,12 @@ class HomeViewModel : ViewModel() {
                 price = 120.0,
                 rating = 4.5f,
                 stock = 10,
-                imageUrl = "https://res.cloudinary.com/dljanm8ai/image/upload/v1749615153/rolex_starbucks3_djf9vt.jpg"
+                imageUrls = listOf(
+                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
+                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
+                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
+                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
+                )
             ),
             Product(
                 id = "4",
@@ -58,7 +73,12 @@ class HomeViewModel : ViewModel() {
                 price = 120.0,
                 rating = 4.5f,
                 stock = 10,
-                imageUrl = "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609106/reloj_cronos_verde_ad2ejo.webp"
+                imageUrls = listOf(
+                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
+                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
+                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
+                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
+                )
             ),
             Product(
                 id = "5",
@@ -67,7 +87,12 @@ class HomeViewModel : ViewModel() {
                 price = 120.0,
                 rating = 4.5f,
                 stock = 10,
-                imageUrl = "https://res.cloudinary.com/dljanm8ai/image/upload/v1749615155/rolex_starbucks_w0f2co.webp"
+                imageUrls = listOf(
+                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
+                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
+                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
+                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
+                )
             ),
             Product(
                 id = "6",
@@ -76,7 +101,12 @@ class HomeViewModel : ViewModel() {
                 price = 120.0,
                 rating = 4.5f,
                 stock = 10,
-                imageUrl = "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609106/reloj_cronos_verde_ad2ejo.webp"
+                imageUrls = listOf(
+                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
+                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
+                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
+                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
+                )
             ),
             Product(
                 id = "7",
@@ -85,7 +115,12 @@ class HomeViewModel : ViewModel() {
                 price = 120.0,
                 rating = 4.5f,
                 stock = 10,
-                imageUrl = "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_crono_verde_3_xl8s6w.jpg"
+                imageUrls = listOf(
+                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
+                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
+                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
+                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
+                )
             ),
             Product(
                 id = "8",
@@ -94,7 +129,12 @@ class HomeViewModel : ViewModel() {
                 price = 120.0,
                 rating = 4.5f,
                 stock = 10,
-                imageUrl = "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_crono_verde_3_xl8s6w.jpg"
+                imageUrls = listOf(
+                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
+                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
+                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
+                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
+                )
             ),
             Product(
                 id = "9",
@@ -103,7 +143,12 @@ class HomeViewModel : ViewModel() {
                 price = 120.0,
                 rating = 4.5f,
                 stock = 10,
-                imageUrl = "https://res.cloudinary.com/dljanm8ai/image/upload/v1749615155/rolex_starbucks_w0f2co.webp"
+                imageUrls = listOf(
+                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
+                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
+                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
+                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
+                )
             ),
             Product(
                 id = "10",
@@ -112,7 +157,12 @@ class HomeViewModel : ViewModel() {
                 price = 120.0,
                 rating = 4.5f,
                 stock = 10,
-                imageUrl = "https://res.cloudinary.com/dljanm8ai/image/upload/v1749615156/reloj_ap_royal3_je9qhm.jpg"
+                imageUrls = listOf(
+                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
+                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
+                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
+                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
+                )
             )
         )
         _products.value = sampleProducts

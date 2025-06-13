@@ -1,60 +1,86 @@
 package com.proyect.ravvisant.features.product
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import com.proyect.ravvisant.R
+import com.proyect.ravvisant.databinding.FragmentProductBinding
+import com.proyect.ravvisant.domain.Product
+import com.proyect.ravvisant.features.home.adapters.ProductClickCallback
+import com.proyect.ravvisant.features.product.adapters.ProductAdapter
+import com.proyect.ravvisant.features.product.adapters.ProductViewModel
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+class ProductFragment : Fragment(), ProductClickCallback {
 
-/**
- * A simple [Fragment] subclass.
- * Use the [ProductFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class ProductFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private var _binding: FragmentProductBinding? = null
+    private val binding get() = _binding!!
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    private val viewModel: ProductViewModel by viewModels()
+    private lateinit var productAdapter: ProductAdapter
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentProductBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        setupRecyclerView()
+        observeViewModel()
+    }
+
+    private fun setupRecyclerView() {
+        productAdapter = ProductAdapter(this)
+        binding.recyclerProducts.apply {
+            layoutManager = GridLayoutManager(requireContext(), 2)
+            adapter = productAdapter
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_product, container, false)
+    private fun observeViewModel() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.products.collectLatest { products ->
+                productAdapter.submitList(products)
+            }
+        }
+
+//        viewLifecycleOwner.lifecycleScope.launch {
+//            viewModel.isLoading.collectLatest { isLoading ->
+//                binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+//            }
+//        }
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment ProductFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            ProductFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun onFavoriteClick(product: Product) {
+        viewModel.toggleFavorite(product)
+    }
+
+    override fun onAddToCartClick(product: Product) {
+        viewModel.addToCart(product)
+        // Podrías mostrar un mensaje de confirmación
+    }
+
+    override fun onProductClick(product: Product) {
+        val bundle = Bundle()
+        bundle.putString("productId", product.id)
+        findNavController().navigate(R.id.productDetailFragment, bundle)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
