@@ -1,5 +1,6 @@
 package com.proyect.ravvisant.features.profile
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.fragment.app.Fragment
@@ -7,9 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.appbar.MaterialToolbar
 import com.proyect.ravvisant.R
+import com.proyect.ravvisant.features.location.LocationFragment
 
 
 class ProfileFragment : Fragment() {
@@ -28,6 +31,11 @@ class ProfileFragment : Fragment() {
         val toolbarTitle = view.findViewById<TextView>(R.id.toolbarTitle)
         val btnAction = view.findViewById<ImageButton>(R.id.btnAction)
         val toolbar = view.findViewById<MaterialToolbar>(R.id.toolbar)
+        val Ubication = view.findViewById<CardView>(R.id.cvDirecciones)
+
+        Ubication.setOnClickListener {
+            findNavController().navigate(R.id.locationFragment)
+        }
 
         toolbarTitle?.text = "Perfil"
 

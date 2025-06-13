@@ -23,6 +23,7 @@
     <string name="cart">Carrito</string>
     <string name="profile">Perfil</string>
 
+
     <!-- Categorías -->
     <string name="category_rings">Anillos</string>
     <string name="category_necklaces">Collares</string>
@@ -45,12 +46,27 @@
     <string name="help">Ayuda y Soporte</string>
     <string name="theme">Modo Claro</string>
     <string name="update_location">Actualizar ubicación</string>
+    <string name="exit">Cerrar Sesion</string>
 
     <!-- Pagos -->
     <string name="methods_pago">Metodo de Pago</string>
     <string name="pay_with_paypal">Pagar con PayPal</string>
     <string name="payment_success">¡Pago exitoso!</string>
     <string name="payment_failed">Error en el pago</string>
+    <string name="resumen_pay">Resumen del pedido</string>
+    <string name="send_product">Envio</string>
+    <string name="select_method_pay">Selecciona tu metodo de pago</string>
+
+    <!-- Metodos Pago -->
+    <string name="paypal">Pay Pal</string>
+    <string name="description_paypal">Paga de forma segura con tu &#10; cuenta de PayPal</string>
+    <string name="card_debit_or_credit">Tarjeta de Credito/Debito</string>
+    <string name="description_card">Visa,Mastercard,American Express</string>
+    <string name="yape">Yape</string>
+    <string name="description_yape">Pago móvil instantáneo</string>
+    <string name="plin">Plin</string>
+    <string name="description_plin">Transferencia bancaria movil</string>
+
 
     <!-- Validaciones / Errores -->
     <string name="field_required">Este campo es obligatorio</string>
@@ -58,10 +74,25 @@
     <string name="passwords_do_not_match">Las contraseñas no coinciden</string>
     <string name="min_password_length">Mínimo 6 caracteres</string>
 
+
+    <!-- Nuestras Ubicacion-->
+    <string name="locations">Nuestras Ubicaciones</string>
+    <string name="horary">Lun-Sab:9:00 AM-8:00PM</string>
+    <string name="number_phone">+51 986 310 261</string>
+    <string name="details_send">Datos de Entrega</string>
+    <string name="distrito">Distrito</string>
+    <string name="location_full">Direccion Completa</string>
+    <string name="phone_call">Telefono Contacto</string>
+    <string name="add_notifications">Notas Adicionales(opcional)</string>
+    <string name="intructions">Instrucciones espaciales para la entrega.....</string>
+
+
     <!-- Misceláneo -->
     <string name="search">Buscar</string>
     <string name="loading">Cargando...</string>
     <string name="try_again">Intenta nuevamente</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>

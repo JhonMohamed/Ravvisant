@@ -28,6 +28,17 @@
         android:id="@+id/profileFragment"
         android:name="com.proyect.ravvisant.features.profile.ProfileFragment"
         android:label="Perfil" />
+    <fragment
+        android:id="@+id/locationFragment"
+        android:name="com.proyect.ravvisant.features.location.LocationFragment"
+        android:label="Location" />
+    <fragment
+        android:id="@+id/payFragment"
+        android:name="com.proyect.ravvisant.features.payment.PayFragment"
+        android:label="Pay" />
+
+
+
 
 <!--    <fragment-->
 <!--        android:id="@+id/productFragment"-->
