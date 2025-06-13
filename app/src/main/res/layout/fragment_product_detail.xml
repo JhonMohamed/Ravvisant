@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="product"
             type="com.proyect.ravvisant.domain.Product" />
@@ -12,9 +11,14 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="?colorSurfaceVariant"
-        tools:context=".ui.productdetail.ProductDetailFragment">
+        android:layout_height="match_parent">
+
+        <include
+            android:id="@+id/topBar"
+            layout="@layout/top_bar_products"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <!-- Imagen principal -->
         <ImageView
@@ -26,50 +30,32 @@
             app:imageUrl="@{product.imageUrl}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/topBar"
             tools:srcCompat="@drawable/ic_launcher_background" />
 
-        <!-- Precio destacado -->
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardPrice"
-            style="@style/Widget.Material3.CardView.Elevated"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:padding="8dp"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="4dp"
-            app:layout_constraintBottom_toBottomOf="@id/imgProductMain"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
-
-            <TextView
-                android:id="@+id/tvPrice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text='@{String.format("$%.2f", product.price)}'
-                android:textColor="?colorOnPrimary"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-        </com.google.android.material.card.MaterialCardView>
-
-
+        <!-- RecyclerView para miniaturas -->
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvRelatedImages"
+            android:id="@+id/rvProductImages"
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:layout_marginTop="16dp"
+            android:clipToPadding="false"
+            android:orientation="horizontal"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintTop_toBottomOf="@id/imgProductMain"
-            tools:itemCount="3"
-            tools:listItem="@layout/item_related_image" />
+            tools:itemCount="4"
+            tools:listitem="@layout/item_product_thumbnail" />
 
         <!-- Información del producto -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_margin="16dp"
             android:orientation="vertical"
-            app:layout_constraintTop_toBottomOf="@id/rvRelatedImages">
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rvProductImages">
 
             <TextView
                 android:id="@+id/tvBrand"
@@ -91,6 +77,16 @@
                 android:textStyle="bold"
                 tools:text="Submariner Date" />
 
+            <TextView
+                android:id="@+id/tvPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text='@{String.format("$%.2f", product.price)}'
+                android:textSize="18sp"
+                android:textStyle="bold"
+                tools:text="$14,500.00" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -102,7 +98,6 @@
                     style="?android:attr/ratingBarStyleSmall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:progressTint="?colorSecondary"
                     android:rating="@{product.rating}"
                     tools:rating="4.5" />
 
@@ -111,9 +106,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
-                    android:text='@{String.format("(%d reseñas)", product.rating)}'
+                    android:text='@{String.format("(%.0f reseñas)", product.rating)}'
                     android:textSize="12sp"
-                    tools:text="(456 reseñas)" />
+                    tools:text="(5 reseñas)" />
             </LinearLayout>
 
             <TextView
@@ -125,16 +120,22 @@
                 android:textSize="14sp"
                 tools:text="Stock: 2 disponibles" />
 
-            <!-- Botón Agregar al Carrito -->
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnAddToCart"
-                style="@style/Widget.Material3.Button.ElevatedButton"
+            <TextView
+                android:id="@+id/tvDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Agregar al Carrito"
-                app:icon="@drawable/ic_car"
-                app:iconGravity="textStart" />
+                android:text="@{product.description}"
+                android:textSize="14sp"
+                tools:text="Este elegante reloj está fabricado con los mejores materiales." />
+
+            <!-- Botón Agregar al Carrito -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnAddToCart"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Agregar al Carrito" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

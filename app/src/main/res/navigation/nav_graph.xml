@@ -34,4 +34,26 @@
 <!--        android:name="com.proyect.ravvisant.features.product.ProductFragment"-->
 <!--        android:label="Producto" />-->
 
+
+
+
+
+
+
+
+
+
+
+
+    <fragment
+        android:id="@+id/productDetailFragment"
+        android:name="com.proyect.ravvisant.features.product.ProductDetailFragment"
+        android:label="Detalle del Producto">
+        <argument
+            android:name="productId"
+            app:argType="string" />
+    </fragment>
+
+
+
 </navigation>

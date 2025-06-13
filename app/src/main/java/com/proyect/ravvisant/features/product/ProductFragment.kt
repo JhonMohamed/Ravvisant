@@ -7,7 +7,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import com.proyect.ravvisant.R
 import com.proyect.ravvisant.databinding.FragmentProductBinding
 import com.proyect.ravvisant.domain.Product
 import com.proyect.ravvisant.features.home.adapters.ProductClickCallback
@@ -69,6 +71,12 @@ class ProductFragment : Fragment(), ProductClickCallback {
     override fun onAddToCartClick(product: Product) {
         viewModel.addToCart(product)
         // Podrías mostrar un mensaje de confirmación
+    }
+
+    override fun onProductClick(product: Product) {
+        val bundle = Bundle()
+        bundle.putString("productId", product.id)
+        findNavController().navigate(R.id.productDetailFragment, bundle)
     }
 
     override fun onDestroyView() {

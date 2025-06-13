@@ -11,8 +11,11 @@ class ProductViewHolder(private val binding: ItemProductGridBinding) :
     fun bind(product: Product, callback: ProductClickCallback) {
         binding.product = product
         binding.callback = callback
+
+        binding.root.setOnClickListener {
+            callback.onProductClick(product)
+        }
+
         binding.executePendingBindings()
     }
-
-
 }
