@@ -1,4 +1,4 @@
-package com.proyect.ravvisant.utils
+package com.proyect.ravvisant.core.utils
 
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter

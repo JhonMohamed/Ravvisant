@@ -1,4 +1,4 @@
-package com.proyect.ravvisant.features.product
+package com.proyect.ravvisant.features.product.presentation
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,8 +7,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.proyect.ravvisant.core.common.loadImage
 import com.proyect.ravvisant.databinding.FragmentProductDetailBinding
-import com.proyect.ravvisant.features.product.adapters.ProductDetailViewModel
+import com.proyect.ravvisant.features.product.viewmodel.ProductDetailViewModel
 import com.proyect.ravvisant.features.product.adapters.ProductThumbnailAdapter
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch

@@ -1,7 +1,7 @@
-package com.proyect.ravvisant.features.product.adapters
+package com.proyect.ravvisant.features.product.viewmodel
 
 import androidx.lifecycle.ViewModel
-import com.proyect.ravvisant.domain.Product
+import com.proyect.ravvisant.domain.model.Product
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 

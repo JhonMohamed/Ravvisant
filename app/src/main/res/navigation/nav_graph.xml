@@ -6,12 +6,12 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.proyect.ravvisant.features.home.HomeFragment"
+        android:name="com.proyect.ravvisant.features.home.presentation.HomeFragment"
         android:label="Inicio" />
 
     <fragment
         android:id="@+id/searchFragment"
-        android:name="com.proyect.ravvisant.features.product.ProductFragment"
+        android:name="com.proyect.ravvisant.features.product.presentation.ProductFragment"
         android:label="Productos" />
 
     <fragment
@@ -42,7 +42,7 @@
 
 <!--    <fragment-->
 <!--        android:id="@+id/productFragment"-->
-<!--        android:name="com.proyect.ravvisant.features.product.ProductFragment"-->
+<!--        android:name="com.proyect.ravvisant.features.product.presentation.ProductFragment"-->
 <!--        android:label="Producto" />-->
 
 
@@ -58,7 +58,7 @@
 
     <fragment
         android:id="@+id/productDetailFragment"
-        android:name="com.proyect.ravvisant.features.product.ProductDetailFragment"
+        android:name="com.proyect.ravvisant.features.product.presentation.ProductDetailFragment"
         android:label="Detalle del Producto">
         <argument
             android:name="productId"

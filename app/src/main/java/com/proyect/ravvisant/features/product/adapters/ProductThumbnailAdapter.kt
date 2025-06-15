@@ -7,7 +7,30 @@ import com.proyect.ravvisant.databinding.ItemProductThumbnailBinding
 
 class ProductThumbnailAdapter(
     private val onThumbnailClick: (position: Int) -> Unit
-) : RecyclerView.Adapter<ThumbnailViewHolder>() {
+) : RecyclerView.Adapter<ProductThumbnailAdapter.ThumbnailViewHolder>() {
+
+
+    inner class ThumbnailViewHolder(
+        private val binding: ItemProductThumbnailBinding,
+        private val onThumbnailClick: (position: Int) -> Unit
+    ) : RecyclerView.ViewHolder(binding.root) {
+
+        init {
+            binding.root.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    onThumbnailClick(position)
+                }
+            }
+        }
+
+        fun bind(imageUrl: String, isSelected: Boolean) {
+            binding.imageUrl = imageUrl
+            binding.selected = isSelected
+            binding.executePendingBindings()
+        }
+    }
+
 
     private val imageUrls = mutableListOf<String>()
     private var selectedPosition = 0

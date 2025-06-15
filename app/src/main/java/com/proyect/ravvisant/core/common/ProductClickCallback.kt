@@ -1,6 +1,6 @@
-package com.proyect.ravvisant.features.home.adapters
+package com.proyect.ravvisant.core.common
 
-import com.proyect.ravvisant.domain.Product
+import com.proyect.ravvisant.domain.model.Product
 
 interface ProductClickCallback {
     fun onFavoriteClick(product: Product)

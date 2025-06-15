@@ -1,4 +1,4 @@
-package com.proyect.ravvisant.data.model
+package com.proyect.ravvisant.domain.model
 
 data class Category(
     val id: String,

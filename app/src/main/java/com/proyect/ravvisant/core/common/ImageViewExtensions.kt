@@ -1,4 +1,4 @@
-package com.proyect.ravvisant.features.product
+package com.proyect.ravvisant.core.common
 
 import android.widget.ImageView
 import com.bumptech.glide.Glide
