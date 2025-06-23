@@ -1,4 +1,4 @@
-package com.proyect.ravvisant.features.product
+package com.proyect.ravvisant.features.product.presentation
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,11 +10,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.proyect.ravvisant.R
+import com.proyect.ravvisant.core.common.ProductClickCallback
 import com.proyect.ravvisant.databinding.FragmentProductBinding
-import com.proyect.ravvisant.domain.Product
-import com.proyect.ravvisant.features.home.adapters.ProductClickCallback
+import com.proyect.ravvisant.domain.model.Product
 import com.proyect.ravvisant.features.product.adapters.ProductAdapter
-import com.proyect.ravvisant.features.product.adapters.ProductViewModel
+import com.proyect.ravvisant.features.product.viewmodel.ProductViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 

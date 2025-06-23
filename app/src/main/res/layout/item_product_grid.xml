@@ -7,11 +7,11 @@
 
         <variable
             name="product"
-            type="com.proyect.ravvisant.domain.Product" />
+            type="com.proyect.ravvisant.domain.model.Product" />
 
         <variable
             name="callback"
-            type="com.proyect.ravvisant.features.home.adapters.ProductClickCallback" />
+            type="com.proyect.ravvisant.core.common.ProductClickCallback" />
     </data>
 
     <com.google.android.material.card.MaterialCardView

@@ -6,7 +6,7 @@
     <data>
         <variable
             name="category"
-            type="com.proyect.ravvisant.data.model.Category" />
+            type="com.proyect.ravvisant.domain.model.Category" />
     </data>
 
     <com.google.android.material.card.MaterialCardView

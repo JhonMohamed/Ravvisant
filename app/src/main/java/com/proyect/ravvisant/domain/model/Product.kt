@@ -1,4 +1,4 @@
-package com.proyect.ravvisant.domain
+package com.proyect.ravvisant.domain.model
 
 data class Product(
     val id: String = "",

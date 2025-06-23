@@ -1,4 +1,4 @@
-package com.proyect.ravvisant.features.home
+package com.proyect.ravvisant.features.home.presentation
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,12 +12,12 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.proyect.ravvisant.R
+import com.proyect.ravvisant.core.common.ProductClickCallback
 import com.proyect.ravvisant.databinding.FragmentHomeBinding
-import com.proyect.ravvisant.domain.Product
-import com.proyect.ravvisant.features.categories.CategoryAdapter
+import com.proyect.ravvisant.domain.model.Product
+import com.proyect.ravvisant.features.categories.adapter.CategoryAdapter
 import com.proyect.ravvisant.features.home.adapters.HomeProductAdapter
-import com.proyect.ravvisant.features.home.adapters.HomeViewModel
-import com.proyect.ravvisant.features.home.adapters.ProductClickCallback
+import com.proyect.ravvisant.features.home.viewmodel.HomeViewModel
 import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {

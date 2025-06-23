@@ -1,4 +1,4 @@
-package com.proyect.ravvisant.features.auth.presentation
+package com.proyect.ravvisant.features.auth
 
 import android.content.Intent
 import android.os.Bundle

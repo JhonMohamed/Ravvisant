@@ -1,8 +1,8 @@
-package com.proyect.ravvisant.features.home.adapters
+package com.proyect.ravvisant.features.home.viewmodel
 
 import androidx.lifecycle.ViewModel
-import com.proyect.ravvisant.data.model.Category
-import com.proyect.ravvisant.domain.Product
+import com.proyect.ravvisant.domain.model.Category
+import com.proyect.ravvisant.domain.model.Product
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 

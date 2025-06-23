@@ -1,7 +1,7 @@
-package com.proyect.ravvisant.utils.diff
+package com.proyect.ravvisant.core.utils.diff
 
 import androidx.recyclerview.widget.DiffUtil
-import com.proyect.ravvisant.domain.Product
+import com.proyect.ravvisant.domain.model.Product
 
 class ProductDiffCallback : DiffUtil.ItemCallback<Product>() {
     override fun areItemsTheSame(
