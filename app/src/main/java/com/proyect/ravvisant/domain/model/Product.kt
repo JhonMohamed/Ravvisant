@@ -9,7 +9,8 @@ data class Product(
     val stock: Int = 0,
     val imageUrls: List<String> = listOf(),
     val description: String = "",
-    val isFavorite: Boolean = false
+    val isFavorite: Boolean = false,
+    val categoryId: String = ""
 ) {
     val imageUrl: String
         get() = if (imageUrls.isNotEmpty()) imageUrls[0] else ""

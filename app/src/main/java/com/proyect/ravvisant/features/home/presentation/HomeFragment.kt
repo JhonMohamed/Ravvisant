@@ -43,6 +43,9 @@ class HomeFragment : Fragment() {
         setupCategoryRecyclerView()
         //Observa datos
         observeViewModel()
+//        binding.btnUploadCategories.setOnClickListener {
+//            viewModel.uploadSampleCategoriesToFirebase(requireContext())
+//        }
     }
 
     private fun setupProductRecyclerView() {
@@ -52,8 +55,9 @@ class HomeFragment : Fragment() {
             }
 
             override fun onAddToCartClick(product: Product) {
-                viewModel.addToCart(product)
+                TODO("Not yet implemented")
             }
+
 
             override fun onProductClick(product: Product) {
                 val bundle = Bundle()

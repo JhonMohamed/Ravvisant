@@ -22,6 +22,7 @@ class ProductDetailFragment : Fragment() {
     private val viewModel: ProductDetailViewModel by viewModels()
     private lateinit var thumbnailAdapter: ProductThumbnailAdapter
 
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

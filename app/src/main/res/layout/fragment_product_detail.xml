@@ -9,133 +9,141 @@
             type="com.proyect.ravvisant.domain.model.Product" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <!-- Envolver todo el ConstraintLayout principal con NestedScrollView -->
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-        <include
-            android:id="@+id/topBar"
-            layout="@layout/top_bar_products"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_height="wrap_content"> <!-- Cambiado a wrap_content -->
 
-        <!-- Imagen principal -->
-        <ImageView
-            android:id="@+id/imgProductMain"
-            android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:adjustViewBounds="true"
-            android:scaleType="centerCrop"
-            app:imageUrl="@{product.imageUrl}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/topBar"
-            tools:srcCompat="@drawable/ic_launcher_background" />
-
-        <!-- RecyclerView para miniaturas -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvProductImages"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_marginTop="16dp"
-            android:clipToPadding="false"
-            android:orientation="horizontal"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintTop_toBottomOf="@id/imgProductMain"
-            tools:itemCount="4"
-            tools:listitem="@layout/item_product_thumbnail" />
-
-        <!-- Información del producto -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_margin="16dp"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/rvProductImages">
-
-            <TextView
-                android:id="@+id/tvBrand"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@{product.brand}"
-                android:textColor="?colorPrimary"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                tools:text="Rolex" />
-
-            <TextView
-                android:id="@+id/tvName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="@{product.name}"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                tools:text="Submariner Date" />
-
-            <TextView
-                android:id="@+id/tvPrice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text='@{String.format("$%.2f", product.price)}'
-                android:textSize="18sp"
-                android:textStyle="bold"
-                tools:text="$14,500.00" />
-
-            <LinearLayout
+            <include
+                android:id="@+id/topBar"
+                layout="@layout/top_bar_products"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:orientation="horizontal">
+                app:layout_constraintTop_toTopOf="parent" />
 
-                <RatingBar
-                    android:id="@+id/ratingBar"
-                    style="?android:attr/ratingBarStyleSmall"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:rating="@{product.rating}"
-                    tools:rating="4.5" />
+            <!-- Imagen principal -->
+            <ImageView
+                android:id="@+id/imgProductMain"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                app:imageUrl="@{product.imageUrl}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/topBar"
+                tools:srcCompat="@drawable/ic_launcher_background" />
+
+            <!-- RecyclerView para miniaturas -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvProductImages"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_marginTop="16dp"
+                android:clipToPadding="false"
+                android:orientation="horizontal"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintTop_toBottomOf="@id/imgProductMain"
+                tools:itemCount="4"
+                tools:listitem="@layout/item_product_thumbnail" />
+
+            <!-- Información del producto -->
+            <LinearLayout
+                android:id="@+id/llProductInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@id/rvProductImages"
+                app:layout_constraintBottom_toBottomOf="parent">
 
                 <TextView
-                    android:id="@+id/tvRatingCount"
+                    android:id="@+id/tvBrand"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
-                    android:text='@{String.format("(%.0f reseñas)", product.rating)}'
-                    android:textSize="12sp"
-                    tools:text="(5 reseñas)" />
+                    android:text="@{product.brand}"
+                    android:textColor="?colorPrimary"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    tools:text="Rolex" />
+
+                <TextView
+                    android:id="@+id/tvName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="@{product.name}"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    tools:text="Submariner Date" />
+
+                <TextView
+                    android:id="@+id/tvPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text='@{String.format("$%.2f", product.price)}'
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    tools:text="$14,500.00" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal">
+
+                    <RatingBar
+                        android:id="@+id/ratingBar"
+                        style="?android:attr/ratingBarStyleSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:rating="@{product.rating}"
+                        tools:rating="4.5" />
+
+                    <TextView
+                        android:id="@+id/tvRatingCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:text='@{String.format("(%.0f reseñas)", product.rating)}'
+                        android:textSize="12sp"
+                        tools:text="(5 reseñas)" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tvStock"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text='@{String.format("Stock: %d disponibles", product.stock)}'
+                    android:textSize="14sp"
+                    tools:text="Stock: 2 disponibles" />
+
+                <TextView
+                    android:id="@+id/tvDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@{product.description}"
+                    android:textSize="14sp"
+                    tools:text="Este elegante reloj está fabricado con los mejores materiales." />
+
+                <!-- Botón Agregar al Carrito -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnAddToCart"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="Agregar al Carrito" />
             </LinearLayout>
-
-            <TextView
-                android:id="@+id/tvStock"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text='@{String.format("Stock: %d disponibles", product.stock)}'
-                android:textSize="14sp"
-                tools:text="Stock: 2 disponibles" />
-
-            <TextView
-                android:id="@+id/tvDescription"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@{product.description}"
-                android:textSize="14sp"
-                tools:text="Este elegante reloj está fabricado con los mejores materiales." />
-
-            <!-- Botón Agregar al Carrito -->
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnAddToCart"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Agregar al Carrito" />
-        </LinearLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
 </layout>

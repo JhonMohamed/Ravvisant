@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
@@ -23,27 +24,29 @@ class ProductFragment : Fragment(), ProductClickCallback {
     private var _binding: FragmentProductBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: ProductViewModel by viewModels()
+    private lateinit var viewModel: ProductViewModel
     private lateinit var productAdapter: ProductAdapter
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentProductBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+       super.onViewCreated(view, savedInstanceState)
+
+        viewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
 
         setupRecyclerView()
         observeViewModel()
+//        binding.btnUploadProducts.setOnClickListener {
+//            viewModel.uploadSampleProductsToFirebase(requireContext())
+//        }
     }
 
-    private fun setupRecyclerView() {
-        productAdapter = ProductAdapter(this)
+    private fun setupRecyclerView() { productAdapter = ProductAdapter(this)
         binding.recyclerProducts.apply {
             layoutManager = GridLayoutManager(requireContext(), 2)
             adapter = productAdapter
@@ -69,9 +72,9 @@ class ProductFragment : Fragment(), ProductClickCallback {
     }
 
     override fun onAddToCartClick(product: Product) {
-        viewModel.addToCart(product)
-        // Podrías mostrar un mensaje de confirmación
+        TODO("Not yet implemented")
     }
+
 
     override fun onProductClick(product: Product) {
         val bundle = Bundle()
@@ -83,4 +86,5 @@ class ProductFragment : Fragment(), ProductClickCallback {
         super.onDestroyView()
         _binding = null
     }
+
 }

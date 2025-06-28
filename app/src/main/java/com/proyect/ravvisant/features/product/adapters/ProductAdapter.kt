@@ -16,10 +16,11 @@ class ProductAdapter(private val callback: ProductClickCallback) :
     inner class ProductViewHolder(private val binding: ItemProductGridBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(product: Product, callback: ProductClickCallback) {
+        fun bind(product: Product) {
             binding.product = product
             binding.callback = callback
 
+            // Opcional: Si usas Glide u otra lógica adicional
             binding.root.setOnClickListener {
                 callback.onProductClick(product)
             }
@@ -28,10 +29,7 @@ class ProductAdapter(private val callback: ProductClickCallback) :
         }
     }
 
-    override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
-    ): ProductViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
         val binding = ItemProductGridBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
@@ -40,11 +38,7 @@ class ProductAdapter(private val callback: ProductClickCallback) :
         return ProductViewHolder(binding)
     }
 
-    override fun onBindViewHolder(
-        holder: ProductViewHolder,
-        position: Int
-    ) {
-        holder.bind(getItem(position), callback)
+    override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
+        holder.bind(getItem(position))
     }
-
 }
