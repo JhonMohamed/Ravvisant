@@ -22,6 +22,17 @@ class ProductDetailFragment : Fragment() {
     private val viewModel: ProductDetailViewModel by viewModels()
     private lateinit var thumbnailAdapter: ProductThumbnailAdapter
 
+    companion object {
+        private const val ARG_PRODUCT_ID = "productId"
+        
+        fun newInstance(productId: String): ProductDetailFragment {
+            return ProductDetailFragment().apply {
+                arguments = Bundle().apply {
+                    putString(ARG_PRODUCT_ID, productId)
+                }
+            }
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,6 +45,11 @@ class ProductDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // Obtener el productId de los argumentos
+        arguments?.getString(ARG_PRODUCT_ID)?.let { productId ->
+            viewModel.loadProduct(productId)
+        }
 
         setupProductImagesRecyclerView()
         observeViewModel()

@@ -1,0 +1,130 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <!-- Puedes agregar variables si lo necesitas -->
+    </data>
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="4dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="16dp">
+
+            <!-- Imagen del producto -->
+            <ImageView
+                android:id="@+id/productImage"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/img_background_gray" />
+
+            <!-- Información del producto -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginStart="16dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/productName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Nombre del Producto"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:maxLines="2"
+                    android:ellipsize="end" />
+
+                <TextView
+                    android:id="@+id/productPrice"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="$99.99"
+                    android:textColor="@color/design_default_color_primary"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/productTotal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Total: $99.99"
+                    android:textColor="@color/ravvisant_dark_primary"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- Controles de cantidad y stock alineados a la derecha -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center_horizontal">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <ImageButton
+                        android:id="@+id/btnDecrease"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:background="@android:color/transparent"
+                        android:src="@drawable/ic_remove"
+                        android:contentDescription="Decrease quantity" />
+
+                    <TextView
+                        android:id="@+id/quantityText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="12dp"
+                        android:text="1"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:minWidth="24dp"
+                        android:gravity="center" />
+
+                    <ImageButton
+                        android:id="@+id/btnIncrease"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:background="@android:color/transparent"
+                        android:src="@drawable/ic_add"
+                        android:contentDescription="Increase quantity" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/stockText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Stock: 0"
+                    android:textSize="12sp"
+                    android:textColor="@color/ravvisant_free" />
+            </LinearLayout>
+
+            <!-- Botón eliminar -->
+            <ImageButton
+                android:id="@+id/btnRemove"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="top"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_trash"
+                android:contentDescription="Remove item" />
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+</layout> 

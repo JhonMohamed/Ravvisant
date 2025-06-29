@@ -275,6 +275,7 @@
                         android:layout_marginLeft="80dp"
                         />
                     <TextView
+                        android:id="@+id/tvFavoritosCount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="2"

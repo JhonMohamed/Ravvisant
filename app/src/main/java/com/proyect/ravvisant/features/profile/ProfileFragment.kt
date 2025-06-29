@@ -19,6 +19,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.proyect.ravvisant.R
 import com.proyect.ravvisant.features.auth.LoginActivity
+import androidx.lifecycle.Observer
+import com.proyect.ravvisant.core.firebase.CartCountService
+import com.proyect.ravvisant.core.firebase.FavoriteCountService
 
 class ProfileFragment : Fragment() {
 
@@ -45,10 +48,27 @@ class ProfileFragment : Fragment() {
         val toolbar = view.findViewById<MaterialToolbar>(R.id.toolbar)
         val Ubication = view.findViewById<CardView>(R.id.cvDirecciones)
         val cvExit = view.findViewById<CardView>(R.id.cvExit)
+        val cvShop = view.findViewById<CardView>(R.id.cvShop)
+        val cvFavorits = view.findViewById<CardView>(R.id.cvFavorits)
+        val cvFavoritos = view.findViewById<CardView>(R.id.cvFavoritos)
 
         ivProfile = view.findViewById(R.id.ivProfile)
         tvUser = view.findViewById(R.id.tvUser)
         tvCorreoUser = view.findViewById(R.id.tvCorreoUser)
+
+        // Contadores dinámicos
+        val tvCar = view.findViewById<TextView>(R.id.tvCar)
+        val tvFavo = view.findViewById<TextView>(R.id.tvFavo)
+        val tvFavoritosCount = view.findViewById<TextView>(R.id.tvFavoritosCount)
+        CartCountService.loadCartCount()
+        FavoriteCountService.loadFavoriteCount()
+        CartCountService.cartCount.observe(viewLifecycleOwner, Observer { count ->
+            tvCar.text = count.toString()
+        })
+        FavoriteCountService.favoriteCount.observe(viewLifecycleOwner, Observer { count ->
+            tvFavo.text = count.toString()
+            tvFavoritosCount.text = count.toString()
+        })
 
         // Actualiza datos de usuario
         updateUserInfo(auth.currentUser)
@@ -90,6 +110,16 @@ class ProfileFragment : Fragment() {
                 startActivity(intent)
                 requireActivity().finish()
             }
+        }
+
+        cvShop.setOnClickListener {
+            findNavController().navigate(R.id.cartFragment)
+        }
+        cvFavorits.setOnClickListener {
+            findNavController().navigate(R.id.favoriteFragment)
+        }
+        cvFavoritos.setOnClickListener {
+            findNavController().navigate(R.id.favoriteFragment)
         }
     }
 

@@ -72,7 +72,7 @@ class ProductFragment : Fragment(), ProductClickCallback {
     }
 
     override fun onAddToCartClick(product: Product) {
-        TODO("Not yet implemented")
+        viewModel.addToCart(product, requireContext())
     }
 
 
