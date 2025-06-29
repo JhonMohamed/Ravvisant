@@ -7,15 +7,27 @@ import androidx.fragment.app.Fragment
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.proyect.ravvisant.R
-import com.proyect.ravvisant.features.location.LocationFragment
-
+import com.proyect.ravvisant.features.auth.LoginActivity
 
 class ProfileFragment : Fragment() {
+
+    private val auth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
+    private var authListener: FirebaseAuth.AuthStateListener? = null
+
+    private var ivProfile: ImageView? = null
+    private var tvUser: TextView? = null
+    private var tvCorreoUser: TextView? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,13 +44,26 @@ class ProfileFragment : Fragment() {
         val btnAction = view.findViewById<ImageButton>(R.id.btnAction)
         val toolbar = view.findViewById<MaterialToolbar>(R.id.toolbar)
         val Ubication = view.findViewById<CardView>(R.id.cvDirecciones)
+        val cvExit = view.findViewById<CardView>(R.id.cvExit)
+
+        ivProfile = view.findViewById(R.id.ivProfile)
+        tvUser = view.findViewById(R.id.tvUser)
+        tvCorreoUser = view.findViewById(R.id.tvCorreoUser)
+
+        // Actualiza datos de usuario
+        updateUserInfo(auth.currentUser)
+
+        // refrescar datos si cambiamos el usuario
+        authListener = FirebaseAuth.AuthStateListener { firebaseAuth ->
+            updateUserInfo(firebaseAuth.currentUser)
+        }
+        auth.addAuthStateListener(authListener!!)
 
         Ubication.setOnClickListener {
             findNavController().navigate(R.id.locationFragment)
         }
 
         toolbarTitle?.text = "Perfil"
-
         btnAction?.visibility = View.GONE
 
         if (isInBottomNavigation()) {
@@ -48,6 +73,48 @@ class ProfileFragment : Fragment() {
                 findNavController().navigateUp()
             }
         }
+
+        // CERRAR SESIÓN
+        cvExit.setOnClickListener {
+            // en Firebase
+            auth.signOut()
+            // en Google
+            val googleSignInClient = GoogleSignIn.getClient(
+                requireContext(),
+                GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build()
+            )
+            googleSignInClient.signOut().addOnCompleteListener {
+                // a LoginActivity y limpiar
+                val intent = Intent(requireContext(), LoginActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
+                requireActivity().finish()
+            }
+        }
+    }
+
+    private fun updateUserInfo(user: FirebaseUser?) {
+        tvUser?.text = user?.displayName ?: "Sin nombre"
+        tvCorreoUser?.text = user?.email ?: "Sin correo"
+        val photoUrl = user?.photoUrl
+        if (photoUrl != null) {
+            Glide.with(this)
+                .load(photoUrl)
+                .placeholder(R.drawable.img_perfil)
+                .into(ivProfile!!)
+        } else {
+            ivProfile?.setImageResource(R.drawable.img_perfil)
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        // para evitar leaks
+        authListener?.let { auth.removeAuthStateListener(it) }
+        authListener = null
+        ivProfile = null
+        tvUser = null
+        tvCorreoUser = null
     }
 
     private fun isInBottomNavigation(): Boolean {

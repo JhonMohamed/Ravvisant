@@ -159,7 +159,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnCreateAcount"
+            android:id="@+id/btnCreateAccount"
             style="@style/Widget.Material3.Button"
             android:layout_width="match_parent"
             android:layout_height="50dp"
@@ -181,7 +181,7 @@
             android:textColor="?attr/colorOnSurface"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnCreateAcount" />
+            app:layout_constraintTop_toBottomOf="@+id/btnCreateAccount" />
 
         <TextView
             android:id="@+id/tvInitialSesion"
@@ -194,7 +194,7 @@
             android:textStyle="bold"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnCreateAcount" />
+            app:layout_constraintTop_toBottomOf="@+id/btnCreateAccount" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
