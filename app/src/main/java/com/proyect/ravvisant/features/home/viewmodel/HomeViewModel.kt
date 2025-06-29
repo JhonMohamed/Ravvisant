@@ -4,11 +4,16 @@ import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.FirebaseFirestore
 import com.proyect.ravvisant.domain.model.Category
 import com.proyect.ravvisant.domain.model.Product
+import com.proyect.ravvisant.domain.model.CartItem
+import com.proyect.ravvisant.domain.repository.FavoriteRepository
+import com.proyect.ravvisant.domain.repository.CartRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 
 class HomeViewModel : ViewModel() {
     private val _products = MutableStateFlow<List<Product>>(emptyList())
@@ -18,10 +23,13 @@ class HomeViewModel : ViewModel() {
     val categories: StateFlow<List<Category>> = _categories
 
     private val firestore = FirebaseFirestore.getInstance()
+    private val favoriteRepository = FavoriteRepository()
+    private val cartRepository = CartRepository()
 
     // Cargar categorías desde Firebase al iniciar
     init {
         loadCategoriesFromFirebase()
+        loadProductsWithFavorites()
     }
 
     // Cargar categorías desde Firebase
@@ -35,6 +43,65 @@ class HomeViewModel : ViewModel() {
             .addOnFailureListener { exception ->
                 Log.e("HomeViewModel", "Error al cargar categorías", exception)
             }
+    }
+
+    // Cargar productos y verificar su estado de favoritos
+    private fun loadProductsWithFavorites() {
+        viewModelScope.launch {
+            val sampleProducts = getSampleProducts()
+            val productsWithFavorites = favoriteRepository.updateProductFavoriteStatus(sampleProducts)
+            _products.value = productsWithFavorites
+        }
+    }
+
+    fun toggleFavorite(product: Product) {
+        viewModelScope.launch {
+            try {
+                val success = favoriteRepository.toggleFavorite(product)
+                if (success) {
+                    // Actualizar la lista local
+                    val currentProducts = _products.value.toMutableList()
+                    val index = currentProducts.indexOfFirst { it.id == product.id }
+                    if (index != -1) {
+                        val updatedProduct = product.copy(isFavorite = !product.isFavorite)
+                        currentProducts[index] = updatedProduct
+                        _products.value = currentProducts
+                    }
+                    // El contador se actualiza automáticamente con el listener
+                }
+            } catch (e: Exception) {
+                Log.e("HomeViewModel", "Error al actualizar favoritos", e)
+            }
+        }
+    }
+
+    fun addToCart(product: Product, context: Context) {
+        viewModelScope.launch {
+            try {
+                val cartItem = CartItem(
+                    id = product.id,
+                    name = product.name,
+                    imageUrl = product.imageUrls.firstOrNull() ?: "",
+                    price = product.price,
+                    quantity = 1
+                )
+                
+                val success = cartRepository.addToCart(cartItem)
+                if (success) {
+                    Toast.makeText(context, "${product.name} agregado al carrito", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(context, "Error al agregar al carrito", Toast.LENGTH_SHORT).show()
+                }
+            } catch (e: Exception) {
+                Log.e("HomeViewModel", "Error al agregar al carrito", e)
+                Toast.makeText(context, "Error al agregar al carrito", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    // Recargar productos con estado de favoritos actualizado
+    fun refreshProducts() {
+        loadProductsWithFavorites()
     }
 
 //    fun uploadSampleCategoriesToFirebase(context: Context) {
@@ -90,18 +157,8 @@ class HomeViewModel : ViewModel() {
 //        }
 //    }
 
-    fun toggleFavorite(product: Product) {
-        val currentProducts = _products.value.toMutableList()
-        val index = currentProducts.indexOfFirst { it.id == product.id }
-        if (index != -1) {
-            val updatedProduct = product.copy(isFavorite = !product.isFavorite)
-            currentProducts[index] = updatedProduct
-            _products.value = currentProducts
-        }
-    }
-
-    init {
-        val sampleProducts = listOf(
+    private fun getSampleProducts(): List<Product> {
+        return listOf(
             Product(
                 id = "1",
                 name = "Chanel No. 5",
@@ -241,15 +298,35 @@ class HomeViewModel : ViewModel() {
                     "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
                     "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
                 )
+            ),
+            Product(
+                id = "11",
+                name = "Dior Sauvage",
+                brand = "Dior",
+                price = 120.0,
+                rating = 4.5f,
+                stock = 10,
+                imageUrls = listOf(
+                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
+                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
+                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
+                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
+                )
+            ),
+            Product(
+                id = "12",
+                name = "Dior Sauvage",
+                brand = "Dior",
+                price = 120.0,
+                rating = 4.5f,
+                stock = 10,
+                imageUrls = listOf(
+                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
+                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
+                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
+                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
+                )
             )
         )
-        _products.value = sampleProducts
-
-
-
-
-        fun addToCart(product: Product) {
-            //Logica con firebase
-        }
     }
 }

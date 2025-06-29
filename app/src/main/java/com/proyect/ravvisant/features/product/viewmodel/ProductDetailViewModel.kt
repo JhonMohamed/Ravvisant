@@ -14,13 +14,14 @@ class ProductDetailViewModel(
     private val _product = MutableStateFlow<Product?>(null)
     val product: StateFlow<Product?> = _product
 
-
     init {
-        loadProduct()
+        // Intentar cargar el producto desde SavedStateHandle si está disponible
+        savedStateHandle.get<String>("productId")?.let { productId ->
+            loadProduct(productId)
+        }
     }
 
-    private fun loadProduct() {
-        val productId = savedStateHandle.get<String>("productId") ?: return
+    fun loadProduct(productId: String) {
         viewModelScope.launch {
             val sampleProducts = listOf(
                 Product(
@@ -37,10 +38,36 @@ class ProductDetailViewModel(
                     ),
                     description = "Este elegante reloj Patek Philippe Nautilus está fabricado con los mejores materiales."
                 ),
+                Product(
+                    id = "2",
+                    name = "Dior Sauvage",
+                    brand = "Dior",
+                    price = 120.0,
+                    rating = 4.5f,
+                    stock = 10,
+                    imageUrls = listOf(
+                        "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
+                        "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_lateral_pwlkku.jpg",
+                        "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_frente_jk3zef.jpg"
+                    ),
+                    description = "Un perfume masculino moderno y sofisticado."
+                ),
+                Product(
+                    id = "3",
+                    name = "Nautilus Cara Azul",
+                    brand = "Patek Philippe",
+                    price = 79999.99,
+                    rating = 4.9f,
+                    stock = 5,
+                    imageUrls = listOf(
+                        "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
+                        "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_lateral_pwlkku.jpg",
+                        "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_frente_jk3zef.jpg"
+                    ),
+                    description = "Reloj Patek Philippe Nautilus con carátula azul y correa de acero. Elegancia suiza atemporal."
+                )
             )
             _product.value = sampleProducts.find { it.id == productId }
         }
     }
-
-
 }
