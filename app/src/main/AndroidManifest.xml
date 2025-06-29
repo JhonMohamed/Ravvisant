@@ -25,5 +25,6 @@
         </activity>
         <activity android:name=".features.auth.RegisterActivity" />
     </application>
+    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>
