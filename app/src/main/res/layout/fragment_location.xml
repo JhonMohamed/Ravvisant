@@ -11,103 +11,24 @@
         android:padding="20dp"
         android:layout_height="wrap_content">
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cvSelectUbication"
-            android:layout_width="340dp"
-            android:backgroundTint="@color/ravvisant_dark_onSecondary"
-            app:cardCornerRadius="10dp"
-            android:layout_height="290dp"
+        <!-- Mapa real de Google -->
+        <fragment
+            android:id="@+id/mapView"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-                <ImageView
-                    android:id="@+id/ivLocation"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_location"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginLeft="20dp"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    />
-                <TextView
-                    android:id="@+id/tvLocations"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:text="@string/locations"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginLeft="50dp"
-                    />
-                <ImageView
-                    android:id="@+id/ivMaps"
-                    android:layout_width="250dp"
-                    android:layout_height="140dp"
-                    android:src="@drawable/img_background_gray"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    android:layout_marginTop="50dp"
-                    android:layout_marginLeft="40dp"
-                    />
-                <ImageView
-                    android:id="@+id/ivPhone"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_call_phone"
-                    android:layout_marginTop="20dp"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    android:layout_marginLeft="35dp"
-                    app:layout_constraintTop_toBottomOf="@+id/ivMaps"
-                    />
-                <TextView
-                    android:id="@+id/tvNumberC"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/number_phone"
-                    android:textColor="@color/ravvisant_light_outline"
-                    app:layout_constraintTop_toBottomOf="@+id/ivMaps"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    android:layout_marginLeft="70dp"
-                    android:layout_marginTop="20dp"
-                    />
-                <ImageView
-                    android:id="@+id/ivWatch"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_horary_watch"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginLeft="35dp"
-                    app:layout_constraintTop_toBottomOf="@+id/ivPhone"
-                    />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/horary"
-                    android:layout_marginTop="15dp"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    android:layout_marginLeft="70dp"
-                    android:textColor="@color/ravvisant_light_outline"
-                    app:layout_constraintTop_toBottomOf="@+id/tvNumberC"
-                    />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </androidx.cardview.widget.CardView>
+            app:layout_constraintLeft_toLeftOf="parent"
+            />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cvUbicationDetails"
             android:layout_width="340dp"
             android:backgroundTint="@color/ravvisant_dark_onSecondary"
             app:cardCornerRadius="10dp"
-            app:layout_constraintTop_toBottomOf="@+id/cvSelectUbication"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/mapView"
             android:layout_marginTop="30dp"
-            android:layout_height="500dp">
+            android:layout_height="wrap_content">
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
@@ -115,7 +36,7 @@
                     android:id="@+id/tvDatesSend"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/details_send"
+                    android:text="Datos de entrega"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     android:textColor="@color/white"
@@ -124,10 +45,12 @@
                     android:layout_marginTop="15dp"
                     android:layout_marginLeft="20dp"
                     />
+
+                <!-- Spinner de Departamentos -->
                 <Spinner
-                    android:id="@+id/spinnerCapitales"
+                    android:id="@+id/spinnerDepartamento"
                     android:layout_width="280dp"
-                    android:layout_height="30dp"
+                    android:layout_height="40dp"
                     android:spinnerMode="dropdown"
                     app:cornerRadius="20dp"
                     app:layout_constraintLeft_toLeftOf="parent"
@@ -136,36 +59,20 @@
                     app:layout_constraintTop_toBottomOf="@+id/tvDatesSend"
                     android:layout_margin="16dp"/>
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/txtDistrito"
-                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-                    android:layout_width="300dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:hint="@string/distrito"
-                    app:boxCornerRadiusBottomEnd="8dp"
-                    app:boxCornerRadiusBottomStart="8dp"
-                    app:boxCornerRadiusTopEnd="8dp"
-                    app:boxCornerRadiusTopStart="8dp"
-                    app:boxStrokeColor="?attr/colorPrimary"
+                <!-- Spinner de Distritos -->
+                <Spinner
+                    android:id="@+id/spinnerDistrito"
+                    android:layout_width="280dp"
+                    android:layout_height="40dp"
+                    android:spinnerMode="dropdown"
+                    app:cornerRadius="20dp"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    android:layout_marginLeft="20dp"
-                    app:endIconMode="clear_text"
-                    app:hintTextColor="?attr/colorOnSurfaceVariant"
-                    app:layout_constraintTop_toBottomOf="@id/spinnerCapitales"
-                    app:startIconDrawable="@drawable/ic_location_arroww"
-                    app:startIconTint="?attr/colorOnSurfaceVariant">
+                    android:layout_marginLeft="30dp"
+                    android:background="@color/white"
+                    app:layout_constraintTop_toBottomOf="@id/spinnerDepartamento"
+                    android:layout_margin="16dp"/>
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/edtDistrito"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:inputType="textPersonName"
-                        android:textColor="?attr/colorOnSurface"
-                        android:textSize="15sp" />
-                </com.google.android.material.textfield.TextInputLayout>
-
+                <!-- Dirección -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/txtDireccion"
                     style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
@@ -182,7 +89,7 @@
                     android:layout_marginLeft="20dp"
                     app:endIconMode="clear_text"
                     app:hintTextColor="?attr/colorOnSurfaceVariant"
-                    app:layout_constraintTop_toBottomOf="@id/txtDistrito"
+                    app:layout_constraintTop_toBottomOf="@id/spinnerDistrito"
                     app:startIconDrawable="@drawable/ic_location"
                     app:startIconTint="?attr/colorOnSurfaceVariant">
 
@@ -196,6 +103,7 @@
                         android:textSize="15sp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <!-- Teléfono -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/txtPhoneFull"
                     style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
@@ -221,11 +129,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:ems="10"
-                        android:inputType="textPersonName"
+                        android:inputType="phone"
                         android:textColor="?attr/colorOnSurface"
                         android:textSize="15sp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <!-- Notas adicionales -->
                 <TextView
                     android:id="@+id/tvAddNots"
                     android:layout_width="wrap_content"
@@ -268,11 +177,12 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnGuardarUbicacion"
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:backgroundTint="?attr/colorPrimary"
                     android:textSize="10dp"
-                    android:text="Editar Ubiciacion"
+                    android:text="Guardar Ubicación"
                     android:textColor="@color/white"
                     app:layout_constraintLeft_toLeftOf="parent"
                     android:layout_marginLeft="60dp"
@@ -281,9 +191,5 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
-
-      
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>
-

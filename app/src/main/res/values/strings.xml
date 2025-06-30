@@ -16,6 +16,8 @@
     <string name="already_have_account">¿Ya tienes una cuenta?</string>
     <string name="dont_have_account">¿No tienes cuenta?</string>
     <string name="default_web_client_id">764479280018-dgavvj753m8ej22ct2hojo9musur75lf.apps.googleusercontent.com</string>
+    <string name="theme_light">Modo claro</string>
+    <string name="theme_dark">Modo oscuro</string>
 
     <!-- Navegación -->
     <string name="home">Inicio</string>

@@ -12,6 +12,11 @@
         android:theme="@style/Theme.JRavvisant"
         android:networkSecurityConfig="@xml/network_security_config"
         tools:targetApi="31">
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyA2x9qyZyT2z0uNL8Q26HfD-UeuY63XNZg" />
+
         <activity
             android:name=".MainActivity"
             android:exported="false" />
@@ -27,5 +32,7 @@
         <activity android:name=".features.auth.RegisterActivity" />
     </application>
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
 </manifest>

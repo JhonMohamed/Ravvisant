@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/colorSurface"
-    android:padding="10dp"
-    >
+    android:padding="10dp">
 
     <include
         android:id="@+id/topBar"
@@ -29,15 +28,14 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
+            <!-- CardView Top Usuario -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/cvTop"
                 android:layout_width="match_parent"
                 app:cardCornerRadius="10dp"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/ravvisant_dark_onSecondary"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
+                android:backgroundTint="@color/ravvisant_dark_onSecondary">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="wrap_content"
@@ -45,7 +43,6 @@
                     android:layout_marginRight="10dp"
                     android:layout_marginLeft="10dp"
                     android:padding="10dp">
-
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/mbtnSetings"
@@ -89,6 +86,7 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
 
+            <!-- Carrito -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/cvShop"
                 android:layout_width="160dp"
@@ -123,8 +121,7 @@
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"
                         android:layout_marginTop="20dp"
-                        android:layout_marginLeft="80dp"
-                        />
+                        android:layout_marginLeft="80dp" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -132,11 +129,11 @@
                         android:textColor="@color/ravvisant_dark_onPrimaryContainer"
                         app:layout_constraintTop_toBottomOf="@id/tvCar"
                         app:layout_constraintLeft_toLeftOf="parent"
-                        android:layout_marginLeft="80dp"
-                        />
-
+                        android:layout_marginLeft="80dp" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
+
+            <!-- Favoritos -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/cvFavorits"
                 android:layout_width="150dp"
@@ -146,8 +143,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/cvTop"
                 app:layout_constraintRight_toRightOf="parent"
                 android:layout_marginRight="0dp"
-                android:layout_marginTop="40dp"
-                >
+                android:layout_marginTop="40dp">
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
@@ -173,8 +169,7 @@
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"
                         android:layout_marginTop="20dp"
-                        android:layout_marginLeft="80dp"
-                        />
+                        android:layout_marginLeft="80dp" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -182,12 +177,11 @@
                         android:textColor="@color/ravvisant_dark_onPrimaryContainer"
                         app:layout_constraintTop_toBottomOf="@id/tvFavo"
                         app:layout_constraintLeft_toLeftOf="parent"
-                        android:layout_marginLeft="80dp"
-                        />
-
+                        android:layout_marginLeft="80dp" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
 
+            <!-- Pedidos -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/cvPedidos"
                 android:layout_width="340dp"
@@ -222,8 +216,7 @@
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"
                         android:layout_marginTop="28dp"
-                        android:layout_marginLeft="80dp"
-                        />
+                        android:layout_marginLeft="80dp" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -236,11 +229,11 @@
                         app:layout_constraintTop_toTopOf="parent"
                         android:layout_marginTop="20dp"
                         android:gravity="center"
-                        android:background="@drawable/bg_circle_shop"
-                        />
+                        android:background="@drawable/bg_circle_shop" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
 
+            <!-- Favoritos Lista -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/cvFavoritos"
                 android:layout_width="340dp"
@@ -275,10 +268,8 @@
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"
                         android:layout_marginTop="28dp"
-                        android:layout_marginLeft="80dp"
-                        />
+                        android:layout_marginLeft="80dp" />
                     <TextView
-                        android:id="@+id/tvFavoritosCount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="2"
@@ -290,11 +281,11 @@
                         app:layout_constraintTop_toTopOf="parent"
                         android:layout_marginTop="20dp"
                         android:gravity="center"
-                        android:background="@drawable/bg_circle_shop"
-                        />
+                        android:background="@drawable/bg_circle_shop" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
 
+            <!-- Método de Pago -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/cvMetodoPago"
                 android:layout_width="340dp"
@@ -329,11 +320,11 @@
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"
                         android:layout_marginTop="28dp"
-                        android:layout_marginLeft="80dp"
-                        />
+                        android:layout_marginLeft="80dp" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
 
+            <!-- Direcciones -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/cvDirecciones"
                 android:layout_width="340dp"
@@ -368,12 +359,11 @@
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"
                         android:layout_marginTop="28dp"
-                        android:layout_marginLeft="80dp"
-                        />
+                        android:layout_marginLeft="80dp" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
 
-
+            <!-- CardView de Tema con Switch -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/cvTema"
                 android:layout_width="340dp"
@@ -387,31 +377,43 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
+
                     <ImageView
                         android:id="@+id/ivTema"
                         android:layout_width="34dp"
                         android:layout_height="40dp"
                         android:src="@drawable/ic_sun"
-                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginTop="20dp" />
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="15dp" />
+
                     <TextView
                         android:id="@+id/tvTema"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/theme"
-                        android:textSize="18dp"
+                        android:textSize="18sp"
                         android:textStyle="bold"
                         android:textColor="@color/ravvisant_dark_onPrimaryContainer"
+                        app:layout_constraintStart_toEndOf="@id/ivTema"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        android:layout_marginTop="28dp"
-                        android:layout_marginLeft="80dp"
-                        />
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="28dp" />
+
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/switchTheme"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:layout_marginEnd="16dp"
+                        android:checked="false"/>
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
 
+            <!-- Salir -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/cvExit"
                 android:layout_width="340dp"
@@ -448,14 +450,10 @@
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"
                         android:layout_marginTop="28dp"
-                        android:layout_marginLeft="80dp"
-                        />
+                        android:layout_marginLeft="80dp" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
 
-
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-
     </androidx.core.widget.NestedScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

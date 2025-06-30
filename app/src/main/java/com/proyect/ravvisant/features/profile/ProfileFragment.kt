@@ -1,5 +1,6 @@
 package com.proyect.ravvisant.features.profile
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -15,13 +16,12 @@ import com.bumptech.glide.Glide
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.proyect.ravvisant.R
 import com.proyect.ravvisant.features.auth.LoginActivity
-import androidx.lifecycle.Observer
-import com.proyect.ravvisant.core.firebase.CartCountService
-import com.proyect.ravvisant.core.firebase.FavoriteCountService
+import androidx.appcompat.app.AppCompatDelegate
 
 class ProfileFragment : Fragment() {
 
@@ -31,6 +31,11 @@ class ProfileFragment : Fragment() {
     private var ivProfile: ImageView? = null
     private var tvUser: TextView? = null
     private var tvCorreoUser: TextView? = null
+
+    companion object {
+        private const val PREFS_NAME = "theme_prefs"
+        private const val KEY_THEME_MODE = "theme_mode"
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,27 +53,30 @@ class ProfileFragment : Fragment() {
         val toolbar = view.findViewById<MaterialToolbar>(R.id.toolbar)
         val Ubication = view.findViewById<CardView>(R.id.cvDirecciones)
         val cvExit = view.findViewById<CardView>(R.id.cvExit)
-        val cvShop = view.findViewById<CardView>(R.id.cvShop)
-        val cvFavorits = view.findViewById<CardView>(R.id.cvFavorits)
-        val cvFavoritos = view.findViewById<CardView>(R.id.cvFavoritos)
 
         ivProfile = view.findViewById(R.id.ivProfile)
         tvUser = view.findViewById(R.id.tvUser)
         tvCorreoUser = view.findViewById(R.id.tvCorreoUser)
 
-        // Contadores dinámicos
-        val tvCar = view.findViewById<TextView>(R.id.tvCar)
-        val tvFavo = view.findViewById<TextView>(R.id.tvFavo)
-        val tvFavoritosCount = view.findViewById<TextView>(R.id.tvFavoritosCount)
-        CartCountService.loadCartCount()
-        FavoriteCountService.loadFavoriteCount()
-        CartCountService.cartCount.observe(viewLifecycleOwner, Observer { count ->
-            tvCar.text = count.toString()
-        })
-        FavoriteCountService.favoriteCount.observe(viewLifecycleOwner, Observer { count ->
-            tvFavo.text = count.toString()
-            tvFavoritosCount.text = count.toString()
-        })
+        // ------------------- THEME SWITCH INTEGRATION ------------------------
+        val switchTheme = view.findViewById<SwitchMaterial>(R.id.switchTheme)
+        val ivTema = view.findViewById<ImageView>(R.id.ivTema)
+        val tvTema = view.findViewById<TextView>(R.id.tvTema)
+
+        val prefs = requireContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        val savedMode = prefs.getInt(KEY_THEME_MODE, AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+
+        AppCompatDelegate.setDefaultNightMode(savedMode)
+        switchTheme.isChecked = savedMode == AppCompatDelegate.MODE_NIGHT_NO
+        updateThemeIconAndText(ivTema, tvTema, switchTheme.isChecked)
+
+        switchTheme.setOnCheckedChangeListener { _, isChecked ->
+            val mode = if (isChecked) AppCompatDelegate.MODE_NIGHT_NO else AppCompatDelegate.MODE_NIGHT_YES
+            AppCompatDelegate.setDefaultNightMode(mode)
+            prefs.edit().putInt(KEY_THEME_MODE, mode).apply()
+            updateThemeIconAndText(ivTema, tvTema, isChecked)
+        }
+        // --------------------------------------------------------------------
 
         // Actualiza datos de usuario
         updateUserInfo(auth.currentUser)
@@ -111,16 +119,6 @@ class ProfileFragment : Fragment() {
                 requireActivity().finish()
             }
         }
-
-        cvShop.setOnClickListener {
-            findNavController().navigate(R.id.cartFragment)
-        }
-        cvFavorits.setOnClickListener {
-            findNavController().navigate(R.id.favoriteFragment)
-        }
-        cvFavoritos.setOnClickListener {
-            findNavController().navigate(R.id.favoriteFragment)
-        }
     }
 
     private fun updateUserInfo(user: FirebaseUser?) {
@@ -134,6 +132,16 @@ class ProfileFragment : Fragment() {
                 .into(ivProfile!!)
         } else {
             ivProfile?.setImageResource(R.drawable.img_perfil)
+        }
+    }
+
+    private fun updateThemeIconAndText(ivTema: ImageView, tvTema: TextView, isLight: Boolean) {
+        if (isLight) {
+            ivTema.setImageResource(R.drawable.ic_sun)
+            tvTema.setText(R.string.theme_light)
+        } else {
+            ivTema.setImageResource(R.drawable.ic_moon)
+            tvTema.setText(R.string.theme_dark)
         }
     }
 
