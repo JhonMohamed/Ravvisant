@@ -18,6 +18,7 @@ import kotlinx.coroutines.launch
 class HomeViewModel : ViewModel() {
     private val _products = MutableStateFlow<List<Product>>(emptyList())
     val products: StateFlow<List<Product>> = _products
+    private var allProducts = emptyList<Product>()
 
     private val _categories = MutableStateFlow<List<Category>>(emptyList())
     val categories: StateFlow<List<Category>> = _categories
@@ -31,7 +32,18 @@ class HomeViewModel : ViewModel() {
         loadCategoriesFromFirebase()
         loadProductsWithFavorites()
     }
-
+    fun filterProductsByCategory(categoryId: String) {
+        viewModelScope.launch {
+            // Si categoryId es vacío o "all", mostramos todos los productos
+            if (categoryId.isEmpty() || categoryId == "all") {
+                _products.value = allProducts
+            } else {
+                // Filtramos los productos según el categoryId
+                val filteredProducts = allProducts.filter { it.categoryId == categoryId }
+                _products.value = filteredProducts
+            }
+        }
+    }
     // Cargar categorías desde Firebase
     private fun loadCategoriesFromFirebase() {
         firestore.collection("categories")
@@ -104,58 +116,6 @@ class HomeViewModel : ViewModel() {
         loadProductsWithFavorites()
     }
 
-//    fun uploadSampleCategoriesToFirebase(context: Context) {
-//        val batch = firestore.batch()
-//
-//        // Datos de prueba para categorías
-//        val sampleCategories = listOf(
-//            Category(
-//                id = "1",
-//                name = "Joyería",
-//                itemCount = 156,
-//                iconUrl = "https://res.cloudinary.com/dljanm8ai/image/upload/v1751089392/categoria_joyas_s0ygjf.png"
-//            ),
-//            Category(
-//                id = "2",
-//                name = "Relojes",
-//                itemCount = 89,
-//                iconUrl = "https://res.cloudinary.com/dljanm8ai/image/upload/v1751089393/categoria_reloj_cr2pdh.jpg"
-//            ),
-//            Category(
-//                id = "3",
-//                name = "Lentes",
-//                itemCount = 210,
-//                iconUrl = "https://res.cloudinary.com/dljanm8ai/image/upload/v1751089392/categoria_lentes_ifjrdi.png"
-//            ),
-//            Category(
-//                id = "4",
-//                name = "Perfumes",
-//                itemCount = 210,
-//                iconUrl = "https://res.cloudinary.com/dljanm8ai/image/upload/v1751089392/categoria_perfume_nn1uix.jpg"
-//            ),
-//            Category(
-//                id = "5",
-//                name = "Gorras",
-//                itemCount = 210,
-//                iconUrl = "https://res.cloudinary.com/dljanm8ai/image/upload/v1751089392/categoria_gorra_czrlza.jpg"
-//            ),
-//        )
-//        _categories.value = sampleCategories
-//
-//
-//
-//        for (category in sampleCategories) {
-//            val documentRef = firestore.collection("categories").document(category.id)
-//            batch.set(documentRef, category)
-//        }
-//
-//        batch.commit().addOnSuccessListener {
-//            Toast.makeText(context, "Categorías subidas correctamente", Toast.LENGTH_SHORT).show()
-//        }.addOnFailureListener { exception ->
-//            Toast.makeText(context, "Error al subir categorías", Toast.LENGTH_SHORT).show()
-//            Log.e("HomeViewModel", "Error al subir categorías", exception)
-//        }
-//    }
 
     private fun getSampleProducts(): List<Product> {
         return listOf(

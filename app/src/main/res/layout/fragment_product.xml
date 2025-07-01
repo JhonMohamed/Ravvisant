@@ -11,11 +11,37 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvCategories"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintTop_toBottomOf="@id/topBar" />
+        <Button
+            android:id="@+id/btnShowAll"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="Mostrar Todo"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rvCategories" />
+        <Button
+            android:id="@+id/btnUploadCategories"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Subir Categorías"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnShowAll" />
         <Button
             android:id="@+id/btnUploadProducts"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/topBar"
+            app:layout_constraintTop_toBottomOf="@id/btnUploadCategories"
             android:text="Subir productos a Firebase"
             android:layout_marginTop="16dp"
             app:layout_constraintStart_toStartOf="parent"

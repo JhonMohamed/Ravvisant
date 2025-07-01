@@ -72,8 +72,12 @@ class HomeFragment : Fragment() {
             adapter = this@HomeFragment.adapter
         }
     }
+
     private fun setupCategoryRecyclerView() {
-        categoryAdapter = CategoryAdapter()
+        categoryAdapter = CategoryAdapter { category ->
+            // Aquí recibes la categoría seleccionada
+            viewModel.filterProductsByCategory(category.id)
+        }
         binding.rvCategories.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = categoryAdapter

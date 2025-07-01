@@ -10,6 +10,8 @@ import com.proyect.ravvisant.domain.repository.CartRepository
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
+import com.proyect.ravvisant.domain.model.Category
+import com.proyect.ravvisant.features.categories.adapter.CategoryAdapter
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -18,15 +20,32 @@ class ProductViewModel : ViewModel() {
 
     private val _products = MutableStateFlow<List<Product>>(emptyList())
     val products: StateFlow<List<Product>> = _products
+    private var allProducts = emptyList<Product>()
+
+
+    private val _categories = MutableStateFlow<List<Category>>(emptyList())
+    val categories: StateFlow<List<Category>> = _categories
 
     private val firestore = FirebaseFirestore.getInstance()
     private val favoriteRepository = FavoriteRepository()
     private val cartRepository = CartRepository()
 
     init {
+        loadCategoriesFromFirebase()
         loadProducts()
     }
 
+    private fun loadCategoriesFromFirebase() {
+        firestore.collection("categories")
+            .get()
+            .addOnSuccessListener { result ->
+                val categoryList = result.toObjects(Category::class.java)
+                _categories.value = categoryList
+            }
+            .addOnFailureListener { exception ->
+                Log.e("HomeViewModel", "Error al cargar categorías", exception)
+            }
+    }
     // Carga inicial de productos
     private fun loadProducts() {
         firestore.collection("products")
@@ -35,17 +54,24 @@ class ProductViewModel : ViewModel() {
                     Log.e("ProductViewModel", "Error al cargar productos", error)
                     return@addSnapshotListener
                 }
-
                 if (snapshot != null && !snapshot.isEmpty) {
                     val productList = snapshot.toObjects(Product::class.java)
-                    // Actualizar el estado de favoritos para cada producto
-                    viewModelScope.launch {
-                        val productsWithFavorites = favoriteRepository.updateProductFavoriteStatus(productList)
-                        _products.value = productsWithFavorites
-                    }
+                    allProducts = productList
+                    _products.value = productList
                 }
             }
+            }
+    fun filterProductsByCategory(categoryId: String) {
+        viewModelScope.launch {
+            if (categoryId.isEmpty() || categoryId == "all") {
+                _products.value = allProducts
+            } else {
+                val filteredProducts = allProducts.filter { it.categoryId == categoryId }
+                _products.value = filteredProducts
+            }
+        }
     }
+
 
     fun toggleFavorite(product: Product) {
         viewModelScope.launch {
@@ -60,7 +86,6 @@ class ProductViewModel : ViewModel() {
                         currentProducts[index] = updatedProduct
                         _products.value = currentProducts
                     }
-                    // El contador se actualiza automáticamente con el listener
                 }
             } catch (e: Exception) {
                 Log.e("ProductViewModel", "Error al actualizar favoritos", e)
@@ -102,6 +127,34 @@ class ProductViewModel : ViewModel() {
             }
         }
     }
+
+//        fun uploadSampleCategoriesToFirebase(context: Context) {
+//        val batch = firestore.batch()
+//
+//        // Datos de prueba para categorías
+//        val sampleCategories = listOf(
+//            Category(
+//                id = "6",
+//                name = "Musica",
+//                itemCount = 156,
+//                iconUrl = "https://res.cloudinary.com/dljanm8ai/image/upload/v1751089392/categoria_joyas_s0ygjf.png"
+//            ),
+//        )
+//        _categories.value = sampleCategories
+//
+//
+//        for (category in sampleCategories) {
+//            val documentRef = firestore.collection("categories").document(category.id)
+//            batch.set(documentRef, category)
+//        }
+//
+//        batch.commit().addOnSuccessListener {
+//            Toast.makeText(context, "Categorías subidas correctamente", Toast.LENGTH_SHORT).show()
+//        }.addOnFailureListener { exception ->
+//            Toast.makeText(context, "Error al subir categorías", Toast.LENGTH_SHORT).show()
+//            Log.e("HomeViewModel", "Error al subir categorías", exception)
+//        }
+//    }
 
 //    private val sampleProducts = listOf(
 //        Product(

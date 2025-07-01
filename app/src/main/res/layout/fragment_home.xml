@@ -23,15 +23,7 @@
             android:orientation="horizontal"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintTop_toBottomOf="@id/topBar" />
-        <Button
-            android:id="@+id/btnUploadCategories"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Subir Categorías"
-            android:layout_marginTop="8dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/rvCategories" />
+
 
         <LinearLayout
             android:id="@+id/titleLayout"
