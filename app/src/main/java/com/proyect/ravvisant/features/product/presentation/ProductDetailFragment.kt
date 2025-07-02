@@ -46,7 +46,6 @@ class ProductDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Obtener el productId de los argumentos
         arguments?.getString(ARG_PRODUCT_ID)?.let { productId ->
             viewModel.loadProduct(productId)
         }

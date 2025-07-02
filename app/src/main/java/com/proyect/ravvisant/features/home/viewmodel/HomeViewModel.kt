@@ -11,9 +11,12 @@ import com.proyect.ravvisant.domain.model.Product
 import com.proyect.ravvisant.domain.model.CartItem
 import com.proyect.ravvisant.domain.repository.FavoriteRepository
 import com.proyect.ravvisant.domain.repository.CartRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
 class HomeViewModel : ViewModel() {
     private val _products = MutableStateFlow<List<Product>>(emptyList())
@@ -32,6 +35,7 @@ class HomeViewModel : ViewModel() {
         loadCategoriesFromFirebase()
         loadProductsWithFavorites()
     }
+
     fun filterProductsByCategory(categoryId: String) {
         viewModelScope.launch {
             // Si categoryId es vacío o "all", mostramos todos los productos
@@ -44,6 +48,7 @@ class HomeViewModel : ViewModel() {
             }
         }
     }
+
     // Cargar categorías desde Firebase
     private fun loadCategoriesFromFirebase() {
         firestore.collection("categories")
@@ -60,8 +65,8 @@ class HomeViewModel : ViewModel() {
     // Cargar productos y verificar su estado de favoritos
     private fun loadProductsWithFavorites() {
         viewModelScope.launch {
-            val sampleProducts = getSampleProducts()
-            val productsWithFavorites = favoriteRepository.updateProductFavoriteStatus(sampleProducts)
+            val firestoreProducts = loadProductsFromFirebase()
+            val productsWithFavorites = favoriteRepository.updateProductFavoriteStatus(firestoreProducts)
             _products.value = productsWithFavorites
         }
     }
@@ -97,12 +102,17 @@ class HomeViewModel : ViewModel() {
                     price = product.price,
                     quantity = 1
                 )
-                
+
                 val success = cartRepository.addToCart(cartItem)
                 if (success) {
-                    Toast.makeText(context, "${product.name} agregado al carrito", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        context,
+                        "${product.name} agregado al carrito",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 } else {
-                    Toast.makeText(context, "Error al agregar al carrito", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Error al agregar al carrito", Toast.LENGTH_SHORT)
+                        .show()
                 }
             } catch (e: Exception) {
                 Log.e("HomeViewModel", "Error al agregar al carrito", e)
@@ -117,176 +127,13 @@ class HomeViewModel : ViewModel() {
     }
 
 
-    private fun getSampleProducts(): List<Product> {
-        return listOf(
-            Product(
-                id = "1",
-                name = "Chanel No. 5",
-                brand = "Chanel",
-                price = 149.99,
-                rating = 4.7f,
-                stock = 18,
-                imageUrls = listOf(
-                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
-                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
-                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
-                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
-                )
-            ),
-            Product(
-                id = "2",
-                name = "Dior Sauvage",
-                brand = "Dior",
-                price = 120.0,
-                rating = 4.5f,
-                stock = 10,
-                imageUrls = listOf(
-                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
-                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
-                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
-                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
-                )
-            ),
-            Product(
-                id = "3",
-                name = "Dior Sauvage",
-                brand = "Dior",
-                price = 120.0,
-                rating = 4.5f,
-                stock = 10,
-                imageUrls = listOf(
-                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
-                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
-                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
-                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
-                )
-            ),
-            Product(
-                id = "4",
-                name = "Dior Sauvage",
-                brand = "Dior",
-                price = 120.0,
-                rating = 4.5f,
-                stock = 10,
-                imageUrls = listOf(
-                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
-                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
-                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
-                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
-                )
-            ),
-            Product(
-                id = "5",
-                name = "Dior Sauvage",
-                brand = "Dior",
-                price = 120.0,
-                rating = 4.5f,
-                stock = 10,
-                imageUrls = listOf(
-                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
-                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
-                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
-                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
-                )
-            ),
-            Product(
-                id = "6",
-                name = "Dior Sauvage",
-                brand = "Dior",
-                price = 120.0,
-                rating = 4.5f,
-                stock = 10,
-                imageUrls = listOf(
-                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
-                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
-                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
-                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
-                )
-            ),
-            Product(
-                id = "7",
-                name = "Dior Sauvage",
-                brand = "Dior",
-                price = 120.0,
-                rating = 4.5f,
-                stock = 10,
-                imageUrls = listOf(
-                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
-                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
-                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
-                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
-                )
-            ),
-            Product(
-                id = "8",
-                name = "Dior Sauvage",
-                brand = "Dior",
-                price = 120.0,
-                rating = 4.5f,
-                stock = 10,
-                imageUrls = listOf(
-                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
-                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
-                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
-                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
-                )
-            ),
-            Product(
-                id = "9",
-                name = "Dior Sauvage",
-                brand = "Dior",
-                price = 120.0,
-                rating = 4.5f,
-                stock = 10,
-                imageUrls = listOf(
-                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
-                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
-                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
-                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
-                )
-            ),
-            Product(
-                id = "10",
-                name = "Dior Sauvage",
-                brand = "Dior",
-                price = 120.0,
-                rating = 4.5f,
-                stock = 10,
-                imageUrls = listOf(
-                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
-                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
-                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
-                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
-                )
-            ),
-            Product(
-                id = "11",
-                name = "Dior Sauvage",
-                brand = "Dior",
-                price = 120.0,
-                rating = 4.5f,
-                stock = 10,
-                imageUrls = listOf(
-                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
-                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
-                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
-                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
-                )
-            ),
-            Product(
-                id = "12",
-                name = "Dior Sauvage",
-                brand = "Dior",
-                price = 120.0,
-                rating = 4.5f,
-                stock = 10,
-                imageUrls = listOf(
-                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
-                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
-                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
-                    "https://res.cloudinary.com/dljanm8ai/image/upload/v1749609108/reloj_patek_azul_2_jrli4f.jpg",
-                )
-            )
-        )
+    private suspend fun loadProductsFromFirebase(): List<Product> = withContext(Dispatchers.IO) {
+        try {
+            val snapshot = firestore.collection("products").get().await()
+            snapshot.toObjects(Product::class.java)
+        } catch (e: Exception) {
+            Log.e("HomeViewModel", "Error al cargar productos desde Firebase", e)
+            emptyList()
+        }
     }
 }
