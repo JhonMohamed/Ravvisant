@@ -7,6 +7,7 @@ import com.proyect.ravvisant.domain.model.Product
 import com.proyect.ravvisant.domain.model.CartItem
 import com.proyect.ravvisant.domain.repository.FavoriteRepository
 import com.proyect.ravvisant.domain.repository.CartRepository
+import com.proyect.ravvisant.core.firebase.FavoriteService
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
@@ -15,6 +16,7 @@ import com.proyect.ravvisant.features.categories.adapter.CategoryAdapter
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 class ProductViewModel : ViewModel() {
 
@@ -29,10 +31,43 @@ class ProductViewModel : ViewModel() {
     private val firestore = FirebaseFirestore.getInstance()
     private val favoriteRepository = FavoriteRepository()
     private val cartRepository = CartRepository()
+    
+    // Callback para cambios en favoritos
+    private val favoriteChangeCallback: (String, Boolean) -> Unit = { productId, isFavorite ->
+        updateProductFavoriteStatus(productId, isFavorite)
+    }
 
     init {
         loadCategoriesFromFirebase()
         loadProducts()
+        // Registrar listener para cambios en favoritos
+        FavoriteService.addFavoriteChangeListener(favoriteChangeCallback)
+    }
+    
+    override fun onCleared() {
+        super.onCleared()
+        // Remover listener cuando el ViewModel se destruye
+        FavoriteService.removeFavoriteChangeListener(favoriteChangeCallback)
+    }
+    
+    // Función para actualizar el estado de favoritos de un producto específico
+    private fun updateProductFavoriteStatus(productId: String, isFavorite: Boolean) {
+        val currentProducts = _products.value.toMutableList()
+        val index = currentProducts.indexOfFirst { it.id == productId }
+        if (index != -1) {
+            val product = currentProducts[index]
+            val updatedProduct = product.copy(isFavorite = isFavorite)
+            currentProducts[index] = updatedProduct
+            _products.value = currentProducts
+        }
+        
+        // También actualizar en allProducts para mantener consistencia
+        val allProductsIndex = allProducts.indexOfFirst { it.id == productId }
+        if (allProductsIndex != -1) {
+            val product = allProducts[allProductsIndex]
+            val updatedProduct = product.copy(isFavorite = isFavorite)
+            allProducts = allProducts.toMutableList().apply { this[allProductsIndex] = updatedProduct }
+        }
     }
 
     private fun loadCategoriesFromFirebase() {
@@ -48,19 +83,19 @@ class ProductViewModel : ViewModel() {
     }
     // Carga inicial de productos
     private fun loadProducts() {
-        firestore.collection("products")
-            .addSnapshotListener { snapshot, error ->
-                if (error != null) {
-                    Log.e("ProductViewModel", "Error al cargar productos", error)
-                    return@addSnapshotListener
-                }
-                if (snapshot != null && !snapshot.isEmpty) {
-                    val productList = snapshot.toObjects(Product::class.java)
-                    allProducts = productList
-                    _products.value = productList
-                }
+        viewModelScope.launch {
+            try {
+                val snapshot = firestore.collection("products").get().await()
+                val productList = snapshot.toObjects(Product::class.java)
+                // Actualizar con estado de favoritos
+                val productsWithFavorites = favoriteRepository.updateProductFavoriteStatus(productList)
+                allProducts = productsWithFavorites
+                _products.value = productsWithFavorites
+            } catch (e: Exception) {
+                Log.e("ProductViewModel", "Error al cargar productos", e)
             }
-            }
+        }
+    }
     fun filterProductsByCategory(categoryId: String) {
         viewModelScope.launch {
             if (categoryId.isEmpty() || categoryId == "all") {
@@ -78,14 +113,8 @@ class ProductViewModel : ViewModel() {
             try {
                 val success = favoriteRepository.toggleFavorite(product)
                 if (success) {
-                    // Actualizar la lista local
-                    val currentProducts = _products.value.toMutableList()
-                    val index = currentProducts.indexOfFirst { it.id == product.id }
-                    if (index != -1) {
-                        val updatedProduct = product.copy(isFavorite = !product.isFavorite)
-                        currentProducts[index] = updatedProduct
-                        _products.value = currentProducts
-                    }
+                    // El estado se actualiza automáticamente a través del listener
+                    // No necesitamos actualizar manualmente aquí
                 }
             } catch (e: Exception) {
                 Log.e("ProductViewModel", "Error al actualizar favoritos", e)

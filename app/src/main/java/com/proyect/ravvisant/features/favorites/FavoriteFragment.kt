@@ -7,6 +7,10 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.proyect.ravvisant.R
 import com.proyect.ravvisant.core.common.ProductClickCallback
@@ -14,6 +18,7 @@ import com.proyect.ravvisant.databinding.FragmentFavoriteBinding
 import com.proyect.ravvisant.domain.model.Product
 import com.proyect.ravvisant.features.favorites.adapter.FavoriteAdapter
 import com.proyect.ravvisant.features.favorites.viewmodel.FavoriteViewModel
+import kotlinx.coroutines.launch
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -55,49 +60,67 @@ class FavoriteFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
-        setupObservers()
+        observeViewModel()
+        // Cargar favoritos al crear la vista
+        viewModel.loadFavorites()
     }
 
     private fun setupRecyclerView() {
+        val productCallback = object : ProductClickCallback {
+            override fun onFavoriteClick(product: Product) {
+                // En la pantalla de favoritos, el botón de favorito elimina el producto
+                viewModel.removeFromFavorites(product)
+            }
+
+            override fun onAddToCartClick(product: Product) {
+                // Implementar lógica para agregar al carrito
+                Toast.makeText(requireContext(), "Agregado al carrito", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onProductClick(product: Product) {
+                val bundle = Bundle()
+                bundle.putString("productId", product.id)
+                findNavController().navigate(R.id.productDetailFragment, bundle)
+            }
+        }
+
         adapter = FavoriteAdapter(
-            callback = object : ProductClickCallback {
-                override fun onFavoriteClick(product: Product) {
-                    viewModel.removeFromFavorites(product)
-                }
-
-                override fun onAddToCartClick(product: Product) {
-                    Toast.makeText(context, "Agregado al carrito", Toast.LENGTH_SHORT).show()
-                }
-
-                override fun onProductClick(product: Product) {
-                    Toast.makeText(context, "Producto: ${product.name}", Toast.LENGTH_SHORT).show()
-                }
-            },
+            callback = productCallback,
             onRemoveFavorite = { product ->
                 viewModel.removeFromFavorites(product)
             }
         )
 
         binding.rvFavorites.apply {
-            layoutManager = GridLayoutManager(context, 2)
+            layoutManager = GridLayoutManager(requireContext(), 2)
             adapter = this@FavoriteFragment.adapter
         }
     }
 
-    private fun setupObservers() {
-        viewModel.favorites.observe(viewLifecycleOwner) { favorites ->
-            adapter.submitList(favorites)
-            updateEmptyState(favorites.isEmpty())
-        }
+    private fun observeViewModel() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    viewModel.favorites.collect { favorites ->
+                        adapter.submitList(favorites)
+                        updateEmptyState(favorites.isEmpty())
+                    }
+                }
 
-        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
-            binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
-        }
+                launch {
+                    viewModel.isLoading.collect { isLoading ->
+                        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+                    }
+                }
 
-        viewModel.error.observe(viewLifecycleOwner) { error ->
-            error?.let {
-                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
-                viewModel.clearError()
+                launch {
+                    viewModel.error.collect { error ->
+                        error?.let {
+                            Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
+                            viewModel.clearError()
+                        }
+                    }
+                }
             }
         }
     }

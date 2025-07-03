@@ -1,27 +1,45 @@
 package com.proyect.ravvisant.features.favorites.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.proyect.ravvisant.domain.model.Product
 import com.proyect.ravvisant.domain.repository.FavoriteRepository
+import com.proyect.ravvisant.core.firebase.FavoriteService
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class FavoriteViewModel : ViewModel() {
     private val repository = FavoriteRepository()
     
-    private val _favorites = MutableLiveData<List<Product>>()
-    val favorites: LiveData<List<Product>> = _favorites
+    private val _favorites = MutableStateFlow<List<Product>>(emptyList())
+    val favorites: StateFlow<List<Product>> = _favorites
     
-    private val _isLoading = MutableLiveData<Boolean>()
-    val isLoading: LiveData<Boolean> = _isLoading
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading
     
-    private val _error = MutableLiveData<String?>()
-    val error: LiveData<String?> = _error
+    private val _error = MutableStateFlow<String?>(null)
+    val error: StateFlow<String?> = _error
+    
+    // Callback para cambios en favoritos
+    private val favoriteChangeCallback: (String, Boolean) -> Unit = { productId, isFavorite ->
+        if (!isFavorite) {
+            // Si se quitó un favorito, removerlo de la lista
+            val currentList = _favorites.value.toMutableList()
+            currentList.removeAll { it.id == productId }
+            _favorites.value = currentList
+        }
+    }
     
     init {
-        loadFavorites()
+        // Registrar listener para cambios en favoritos
+        FavoriteService.addFavoriteChangeListener(favoriteChangeCallback)
+    }
+    
+    override fun onCleared() {
+        super.onCleared()
+        // Remover listener cuando el ViewModel se destruye
+        FavoriteService.removeFavoriteChangeListener(favoriteChangeCallback)
     }
     
     fun loadFavorites() {
@@ -45,13 +63,7 @@ class FavoriteViewModel : ViewModel() {
             try {
                 val success = repository.removeFromFavorites(product.id)
                 if (success) {
-                    // Actualizar la lista local
-                    val currentList = _favorites.value?.toMutableList() ?: mutableListOf()
-                    currentList.removeAll { it.id == product.id }
-                    _favorites.value = currentList
-                    
-                    // Sincronizar el contador
-                    repository.syncFavoriteCount()
+                    // La lista se actualiza automáticamente a través del listener
                 } else {
                     _error.value = "Error al eliminar de favoritos"
                 }
@@ -65,14 +77,7 @@ class FavoriteViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 val success = repository.toggleFavorite(product)
-                if (success) {
-                    // Si estamos en la pantalla de favoritos y quitamos un favorito
-                    if (product.isFavorite) {
-                        val currentList = _favorites.value?.toMutableList() ?: mutableListOf()
-                        currentList.removeAll { it.id == product.id }
-                        _favorites.value = currentList
-                    }
-                } else {
+                if (!success) {
                     _error.value = "Error al actualizar favoritos"
                 }
             } catch (e: Exception) {

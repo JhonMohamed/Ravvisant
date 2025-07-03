@@ -1,6 +1,7 @@
 package com.proyect.ravvisant.features.home.presentation
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,6 +22,8 @@ import com.proyect.ravvisant.features.home.viewmodel.HomeViewModel
 import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
+    private val TAG = "HomeFragment"
+    
     private lateinit var binding: FragmentHomeBinding
     private lateinit var viewModel: HomeViewModel
     private lateinit var adapter: HomeProductAdapter
@@ -36,69 +39,106 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
+        
+        try {
+            viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
 
-        //Configuracion de adaptadores
-        setupProductRecyclerView()
-        setupCategoryRecyclerView()
-        //Observa datos
-        observeViewModel()
-//        binding.btnUploadCategories.setOnClickListener {
-//            viewModel.uploadSampleCategoriesToFirebase(requireContext())
-//        }
+            //Configuracion de adaptadores
+            setupProductRecyclerView()
+            setupCategoryRecyclerView()
+            //Observa datos
+            observeViewModel()
+        } catch (e: Exception) {
+            Log.e(TAG, "Error in onViewCreated", e)
+        }
     }
 
     private fun setupProductRecyclerView() {
-        val productCallback = object : ProductClickCallback {
-            override fun onFavoriteClick(product: Product) {
-                viewModel.toggleFavorite(product)
+        try {
+            val productCallback = object : ProductClickCallback {
+                override fun onFavoriteClick(product: Product) {
+                    try {
+                        viewModel.toggleFavorite(product)
+                    } catch (e: Exception) {
+                        Log.e(TAG, "Error in onFavoriteClick", e)
+                    }
+                }
+
+                override fun onAddToCartClick(product: Product) {
+                    try {
+                        viewModel.addToCart(product, requireContext())
+                    } catch (e: Exception) {
+                        Log.e(TAG, "Error in onAddToCartClick", e)
+                    }
+                }
+
+                override fun onProductClick(product: Product) {
+                    try {
+                        val bundle = Bundle()
+                        bundle.putString("productId", product.id)
+                        findNavController().navigate(R.id.productDetailFragment, bundle)
+                    } catch (e: Exception) {
+                        Log.e(TAG, "Error in onProductClick", e)
+                    }
+                }
             }
 
-            override fun onAddToCartClick(product: Product) {
-                TODO("Not yet implemented")
+            adapter = HomeProductAdapter(productCallback)
+            binding.rvProducts.apply {
+                layoutManager = LinearLayoutManager(context)
+                adapter = this@HomeFragment.adapter
             }
-
-
-            override fun onProductClick(product: Product) {
-                val bundle = Bundle()
-                bundle.putString("productId", product.id)
-                findNavController().navigate(R.id.productDetailFragment, bundle)
-            }
-        }
-
-        adapter = HomeProductAdapter(productCallback)
-        binding.rvProducts.apply {
-            layoutManager = LinearLayoutManager(context)
-            adapter = this@HomeFragment.adapter
+        } catch (e: Exception) {
+            Log.e(TAG, "Error in setupProductRecyclerView", e)
         }
     }
 
     private fun setupCategoryRecyclerView() {
-        categoryAdapter = CategoryAdapter { category ->
-            // Aquí recibes la categoría seleccionada
-            viewModel.filterProductsByCategory(category.id)
-        }
-        binding.rvCategories.apply {
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            adapter = categoryAdapter
+        try {
+            categoryAdapter = CategoryAdapter { category ->
+                try {
+                    // Aquí recibes la categoría seleccionada
+                    viewModel.filterProductsByCategory(category.id)
+                } catch (e: Exception) {
+                    Log.e(TAG, "Error in category selection", e)
+                }
+            }
+            binding.rvCategories.apply {
+                layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                adapter = categoryAdapter
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Error in setupCategoryRecyclerView", e)
         }
     }
 
     private fun observeViewModel() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                launch {
-                    viewModel.products.collect { products ->
-                        adapter.submitList(products)
+        try {
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    launch {
+                        try {
+                            viewModel.products.collect { products ->
+                                adapter.submitList(products)
+                            }
+                        } catch (e: Exception) {
+                            Log.e(TAG, "Error collecting products", e)
+                        }
                     }
-                }
 
-                launch {
-                    viewModel.categories.collect { categories ->
-                        categoryAdapter.submitList(categories)
+                    launch {
+                        try {
+                            viewModel.categories.collect { categories ->
+                                categoryAdapter.submitList(categories)
+                            }
+                        } catch (e: Exception) {
+                            Log.e(TAG, "Error collecting categories", e)
+                        }
                     }
                 }
             }
+        } catch (e: Exception) {
+            Log.e(TAG, "Error in observeViewModel", e)
         }
     }
 }

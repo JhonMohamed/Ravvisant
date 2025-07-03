@@ -35,6 +35,9 @@ class MainActivity : AppCompatActivity() {
         
         // Método temporal para probar los badges
         testBadges(bottomNav)
+        
+        // Configurar listener para manejar navegación desde el perfil
+        setupProfileNavigation(navController, bottomNav)
     }
     
     private fun testBadges(bottomNav: BadgeBottomNavigationView) {
@@ -73,5 +76,16 @@ class MainActivity : AppCompatActivity() {
         // Detener los listeners de los contadores
         FavoriteCountService.stopListening()
         CartCountService.stopListening()
+    }
+    
+    private fun setupProfileNavigation(navController: androidx.navigation.NavController, bottomNav: BadgeBottomNavigationView) {
+        // Escuchar cambios en el destino actual
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            // Si estamos en el perfil, configurar la navegación especial
+            if (destination.id == R.id.profileFragment) {
+                // La navegación se manejará desde el ProfileFragment
+                Log.d(TAG, "Profile fragment loaded, navigation ready")
+            }
+        }
     }
 }
