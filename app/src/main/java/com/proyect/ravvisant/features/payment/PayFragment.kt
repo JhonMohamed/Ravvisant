@@ -4,18 +4,22 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.proyect.ravvisant.R
+import com.proyect.ravvisant.core.utils.PayPalUtils
 import com.proyect.ravvisant.databinding.FragmentPayBinding
 import com.proyect.ravvisant.domain.model.PaymentMethod
 import com.proyect.ravvisant.features.payment.viewmodel.PaymentState
 import com.proyect.ravvisant.features.payment.viewmodel.PaymentViewModel
+import com.proyect.ravvisant.features.cart.viewmodel.CartViewModel
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.OkHttpClient
@@ -25,17 +29,25 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
 import java.io.IOException
+import java.math.BigDecimal
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+import androidx.lifecycle.Lifecycle
 
 class PayFragment : Fragment() {
-    
+
     private var _binding: FragmentPayBinding? = null
     private val binding get() = _binding!!
-    
+
     private val viewModel: PaymentViewModel by viewModels()
-    
+    private val cartViewModel: CartViewModel by activityViewModels()
+
     private var currentTransactionId: String? = null
     private var currentAmount: Double = 0.0
-    
+    private var currentPayPalOrderId: String? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -43,25 +55,44 @@ class PayFragment : Fragment() {
         _binding = FragmentPayBinding.inflate(inflater, container, false)
         return binding.root
     }
-    
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        
+
         setupUI()
         setupObservers()
         setupClickListeners()
-        
-        // Simular datos de carrito (en producción vendrían del ViewModel del carrito)
-        setupCartData()
+
+        // Observa los productos y el total del carrito
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                cartViewModel.cartItems.collectLatest { items ->
+                    val cantidad = items.sumOf { it.quantity }
+                    binding.tvProductos.text = "Productos ($cantidad)"
+                }
+            }
+        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                cartViewModel.totalAmount.collectLatest { total ->
+                    currentAmount = total
+                    binding.tvTotalPay.text = "S/ ${String.format("%.2f", total)}"
+                    binding.tvPayProducts.text = "S/ ${String.format("%.2f", total)}"
+                }
+            }
+        }
+
+        // Configurar PayPal
+        setupPayPal()
     }
-    
+
     private fun setupUI() {
         // Configurar el monto total
         currentAmount = 9219.91
         binding.tvTotalPay.text = "S/ ${String.format("%.2f", currentAmount)}"
         binding.tvPayProducts.text = "S/ ${String.format("%.2f", currentAmount)}"
     }
-    
+
     private fun setupObservers() {
         viewModel.paymentState.observe(viewLifecycleOwner) { state ->
             when (state) {
@@ -73,7 +104,14 @@ class PayFragment : Fragment() {
                 }
                 is PaymentState.Success -> {
                     showLoading(false)
-                    showPaymentDialog(state.response)
+                    if (state.response.paymentUrl != null) {
+                        // Es una respuesta de PayPal, abrir en navegador
+                        currentPayPalOrderId = state.response.transactionId
+                        openPayPalInBrowser(state.response.paymentUrl)
+                    } else {
+                        // Es una respuesta de otro método de pago
+                        showPaymentDialog(state.response)
+                    }
                 }
                 is PaymentState.PaymentPending -> {
                     showLoading(false)
@@ -90,53 +128,48 @@ class PayFragment : Fragment() {
                 is PaymentState.OpenPaymentApp -> {
                     openPaymentApp(state.url)
                 }
+                is PaymentState.PayPalReady -> {
+                    createPayPalOrder(state.paymentRequest)
+                }
             }
         }
-        
+
         viewModel.selectedPaymentMethod.observe(viewLifecycleOwner) { method ->
             updatePaymentMethodSelection(method)
         }
     }
-    
+
     private fun setupClickListeners() {
         // PayPal
         binding.cvPayPal.setOnClickListener {
             viewModel.selectPaymentMethod(PaymentMethod.PAYPAL)
-            startPayPalCheckout(currentAmount)
+            processPayment()
         }
-        
+
         // Tarjeta de crédito/débito
         binding.cvCard.setOnClickListener {
             viewModel.selectPaymentMethod(PaymentMethod.CREDIT_CARD)
             processPayment()
         }
-        
+
         // Yape
         binding.cvYape.setOnClickListener {
             viewModel.selectPaymentMethod(PaymentMethod.YAPE)
             processPayment()
         }
-        
+
         // Plin
         binding.cvPLin.setOnClickListener {
             viewModel.selectPaymentMethod(PaymentMethod.PLIN)
             processPayment()
         }
     }
-    
-    private fun setupCartData() {
-        // En producción, estos datos vendrían del ViewModel del carrito
-        binding.tvProductos.text = "Productos (9)"
-        binding.tvPayProducts.text = "S/ ${String.format("%.2f", currentAmount)}"
-        binding.tvPayEnvio.text = "Gratis"
-        binding.tvTotalPay.text = "S/ ${String.format("%.2f", currentAmount)}"
-    }
-    
+
     private fun processPayment() {
         val customerName = "Cliente Ravvisant" // En producción vendría del perfil del usuario
         val customerPhone = "+51 999 999 999" // En producción vendría del perfil del usuario
         val description = "Compra en Ravvisant - ${binding.tvProductos.text}"
-        
+
         viewModel.processPayment(
             amount = currentAmount,
             description = description,
@@ -144,14 +177,14 @@ class PayFragment : Fragment() {
             customerPhone = customerPhone
         )
     }
-    
+
     private fun updatePaymentMethodSelection(selectedMethod: PaymentMethod) {
         // Resetear todos los estilos
         binding.cvPayPal.alpha = 0.7f
         binding.cvCard.alpha = 0.7f
         binding.cvYape.alpha = 0.7f
         binding.cvPLin.alpha = 0.7f
-        
+
         // Resaltar el método seleccionado
         when (selectedMethod) {
             PaymentMethod.PAYPAL -> binding.cvPayPal.alpha = 1.0f
@@ -160,7 +193,7 @@ class PayFragment : Fragment() {
             PaymentMethod.PLIN -> binding.cvPLin.alpha = 1.0f
         }
     }
-    
+
     private fun showPaymentDialog(response: com.proyect.ravvisant.domain.model.PaymentResponse) {
         val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_yape_qr, null)
         val dialog = AlertDialog.Builder(requireContext())
@@ -168,29 +201,9 @@ class PayFragment : Fragment() {
             .setCancelable(false)
             .create()
 
-        // Campo de texto para el código de aprobación
-        val etCodigoAprobacion = dialogView.findViewById<android.widget.EditText>(R.id.etCodigoAprobacion)
-        val btnConfirmarPago = dialogView.findViewById<android.widget.Button>(R.id.btnConfirmarPago)
-        val btnCancel = dialogView.findViewById<android.widget.Button>(R.id.btnCancel)
-
-        btnConfirmarPago.setOnClickListener {
-            val codigo = etCodigoAprobacion.text.toString().trim()
-            if (codigo.isEmpty()) {
-                Toast.makeText(context, "Por favor ingresa el código de aprobación", Toast.LENGTH_SHORT).show()
-            } else {
-                dialog.dismiss()
-                showPaymentSuccessDialog()
-            }
-        }
-
-        btnCancel.setOnClickListener {
-            dialog.dismiss()
-            viewModel.resetPaymentState()
-        }
-
         dialog.show()
     }
-    
+
     private fun showPaymentSuccessDialog() {
         AlertDialog.Builder(requireContext())
             .setTitle("¡Pago Exitoso!")
@@ -202,14 +215,14 @@ class PayFragment : Fragment() {
             .setCancelable(false)
             .show()
     }
-    
+
     private fun showLoading(show: Boolean) {
         // Aquí podrías mostrar un ProgressBar o similar
         if (show) {
             Toast.makeText(context, "Procesando pago...", Toast.LENGTH_SHORT).show()
         }
     }
-    
+
     private fun openPaymentApp(url: String) {
         try {
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
@@ -218,61 +231,56 @@ class PayFragment : Fragment() {
             Toast.makeText(context, "No se pudo abrir la aplicación de pago", Toast.LENGTH_SHORT).show()
         }
     }
-    
+
     private fun navigateToSuccess() {
         // Aquí navegarías a la pantalla de confirmación
         // Por ahora solo mostramos un mensaje
         Toast.makeText(context, "¡Gracias por tu compra!", Toast.LENGTH_LONG).show()
-        
+
         // Limpiar el estado del pago
         viewModel.resetPaymentState()
-        
+
         // Navegar de vuelta al home o a la pantalla de confirmación
         // findNavController().navigate(R.id.action_payFragment_to_homeFragment)
     }
-    
-    private fun startPayPalCheckout(amount: Double) {
-        val url = "http://192.168.224.188:3000/create-order"
-        val json = JSONObject()
-        json.put("amount", String.format("%.2f", amount))
-        json.put("currency", "USD")
 
-        val requestBody = json.toString().toRequestBody("application/json".toMediaType())
-        val request = Request.Builder()
-            .url(url)
-            .post(requestBody)
-            .build()
+    private fun setupPayPal() {
+        // Validar configuración de PayPal
+        val validation = PayPalUtils.validateConfiguration()
+        if (!validation.isValid) {
+            // Deshabilitar PayPal si no está configurado
+            binding.cvPayPal.isEnabled = false
+            binding.cvPayPal.alpha = 0.5f
+            Toast.makeText(context, "PayPal no está configurado correctamente", Toast.LENGTH_SHORT).show()
 
-        val client = OkHttpClient()
-        client.newCall(request).enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                activity?.runOnUiThread {
-                    Toast.makeText(context, "Error de conexión con PayPal: ${e.message}", Toast.LENGTH_LONG).show()
-                }
-            }
-            override fun onResponse(call: Call, response: Response) {
-                val responseBody = response.body?.string()
-                if (response.isSuccessful && responseBody != null) {
-                    try {
-                        val approvalUrl = JSONObject(responseBody).getString("approvalUrl")
-                        activity?.runOnUiThread {
-                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(approvalUrl))
-                            startActivity(intent)
-                        }
-                    } catch (ex: Exception) {
-                        activity?.runOnUiThread {
-                            Toast.makeText(context, "Respuesta inesperada de PayPal", Toast.LENGTH_LONG).show()
-                        }
-                    }
-                } else {
-                    activity?.runOnUiThread {
-                        Toast.makeText(context, "Error al crear la orden de PayPal", Toast.LENGTH_LONG).show()
-                    }
-                }
-            }
-        })
+            // Log de errores para debugging
+            Log.e("PayFragment", validation.getSummary())
+        } else if (validation.hasWarnings()) {
+            // Mostrar advertencias pero permitir uso
+            Log.w("PayFragment", validation.getSummary())
+        }
     }
-    
+
+    private fun createPayPalOrder(paymentRequest: com.proyect.ravvisant.domain.model.PaymentRequest) {
+        // Validar el monto
+        if (!PayPalUtils.isValidAmount(paymentRequest.amount)) {
+            Toast.makeText(context, "Monto inválido para PayPal", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        // Crear orden de PayPal usando el ViewModel
+        viewModel.createPayPalOrder(paymentRequest)
+    }
+
+    private fun openPayPalInBrowser(url: String) {
+        try {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+            startActivity(intent)
+        } catch (e: Exception) {
+            Toast.makeText(context, "No se pudo abrir PayPal en el navegador", Toast.LENGTH_SHORT).show()
+        }
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

@@ -10,15 +10,17 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 import java.util.*
 import android.util.Log
-
+import com.proyect.ravvisant.core.firebase.PayPalRestService
 class PaymentService : PaymentRepository {
-    
+
     private val firestore = FirebaseFirestore.getInstance()
     private val transactionsCollection = firestore.collection("transactions")
-    
+
     // Simulación de API de Yape (en producción usarías la API real de Yape)
     private val yapeApiUrl = "https://api.yape.com.pe/v1" // URL ficticia
-    
+
+    private val payPalRestService = PayPalRestService()
+
     override suspend fun processPayment(paymentRequest: PaymentRequest): Result<PaymentResponse> {
         return try {
             // Crear transacción en Firebase
@@ -35,10 +37,10 @@ class PaymentService : PaymentRepository {
                 createdAt = Date(),
                 updatedAt = Date()
             )
-            
+
             // Guardar transacción
             val transactionId = saveTransaction(transaction).getOrThrow()
-            
+
             // Procesar pago según el método
             val paymentResponse = when (paymentRequest.paymentMethod) {
                 PaymentMethod.YAPE -> processYapePayment(paymentRequest, transactionId)
@@ -46,26 +48,26 @@ class PaymentService : PaymentRepository {
                 PaymentMethod.PAYPAL -> processPayPalPayment(paymentRequest, transactionId)
                 PaymentMethod.CREDIT_CARD -> processCreditCardPayment(paymentRequest, transactionId)
             }
-            
+
             Result.success(paymentResponse)
         } catch (e: Exception) {
             Result.failure(e)
         }
     }
-    
+
     private suspend fun processYapePayment(
-        paymentRequest: PaymentRequest, 
+        paymentRequest: PaymentRequest,
         transactionId: String
     ): PaymentResponse {
         // En producción, aquí harías la llamada real a la API de Yape
         // Por ahora simulamos la respuesta
-        
+
         val qrCodeUrl = generateYapeQRCode(paymentRequest.amount, transactionId)
         val paymentUrl = generateYapePaymentUrl(transactionId)
-        
+
         // Actualizar transacción con QR y URL
         updateTransactionWithPaymentInfo(transactionId, qrCodeUrl, paymentUrl)
-        
+
         return PaymentResponse(
             success = true,
             transactionId = transactionId,
@@ -75,17 +77,17 @@ class PaymentService : PaymentRepository {
             status = PaymentStatus.PENDING
         )
     }
-    
+
     private suspend fun processPlinPayment(
-        paymentRequest: PaymentRequest, 
+        paymentRequest: PaymentRequest,
         transactionId: String
     ): PaymentResponse {
         // Implementar lógica para Plin
         val qrCodeUrl = generatePlinQRCode(paymentRequest.amount, transactionId)
         val paymentUrl = generatePlinPaymentUrl(transactionId)
-        
+
         updateTransactionWithPaymentInfo(transactionId, qrCodeUrl, paymentUrl)
-        
+
         return PaymentResponse(
             success = true,
             transactionId = transactionId,
@@ -95,35 +97,34 @@ class PaymentService : PaymentRepository {
             status = PaymentStatus.PENDING
         )
     }
-    
-    private suspend fun processPayPalPayment(
-        paymentRequest: PaymentRequest, 
+
+    suspend fun processPayPalPayment(
+        paymentRequest: PaymentRequest,
         transactionId: String
     ): PaymentResponse {
-        // Implementar lógica para PayPal
-        val paymentUrl = generatePayPalPaymentUrl(paymentRequest.amount, transactionId)
-        
-        updateTransactionWithPaymentInfo(transactionId, null, paymentUrl)
-        
-        return PaymentResponse(
-            success = true,
-            transactionId = transactionId,
-            qrCodeUrl = null,
-            paymentUrl = paymentUrl,
-            message = "Pago PayPal generado exitosamente",
-            status = PaymentStatus.PENDING
-        )
+        // Lógica real con PayPalRestService
+        val result = payPalRestService.createPayPalOrder(paymentRequest)
+        return result.getOrElse {
+            PaymentResponse(
+                success = false,
+                transactionId = null,
+                qrCodeUrl = null,
+                paymentUrl = null,
+                message = it.message,
+                status = PaymentStatus.FAILED
+            )
+        }
     }
-    
+
     private suspend fun processCreditCardPayment(
-        paymentRequest: PaymentRequest, 
+        paymentRequest: PaymentRequest,
         transactionId: String
     ): PaymentResponse {
         // Implementar lógica para tarjeta de crédito
         val paymentUrl = generateCreditCardPaymentUrl(paymentRequest.amount, transactionId)
-        
+
         updateTransactionWithPaymentInfo(transactionId, null, paymentUrl)
-        
+
         return PaymentResponse(
             success = true,
             transactionId = transactionId,
@@ -133,14 +134,14 @@ class PaymentService : PaymentRepository {
             status = PaymentStatus.PENDING
         )
     }
-    
+
     override suspend fun checkPaymentStatus(transactionId: String): Result<PaymentResponse> {
         return try {
             val transaction = getTransaction(transactionId).getOrThrow()
-            
+
             // En producción, aquí verificarías el estado real con la API de Yape
             val status = checkPaymentStatusWithProvider(transaction)
-            
+
             Result.success(PaymentResponse(
                 success = status == PaymentStatus.COMPLETED,
                 transactionId = transactionId,
@@ -153,7 +154,7 @@ class PaymentService : PaymentRepository {
             Result.failure(e)
         }
     }
-    
+
     override suspend fun saveTransaction(transaction: PaymentTransaction): Result<String> {
         return try {
             val docRef = transactionsCollection.add(transaction).await()
@@ -162,7 +163,7 @@ class PaymentService : PaymentRepository {
             Result.failure(e)
         }
     }
-    
+
     override suspend fun getTransaction(transactionId: String): Result<PaymentTransaction> {
         return try {
             val document = transactionsCollection.document(transactionId).get().await()
@@ -176,9 +177,9 @@ class PaymentService : PaymentRepository {
             Result.failure(e)
         }
     }
-    
+
     override suspend fun updateTransactionStatus(
-        transactionId: String, 
+        transactionId: String,
         status: String
     ): Result<Boolean> {
         return try {
@@ -187,17 +188,17 @@ class PaymentService : PaymentRepository {
                 "status" to statusEnum,
                 "updatedAt" to Date()
             )
-            
+
             transactionsCollection.document(transactionId)
                 .update(updates)
                 .await()
-            
+
             Result.success(true)
         } catch (e: Exception) {
             Result.failure(e)
         }
     }
-    
+
     override fun getTransactionsFlow(): Flow<List<PaymentTransaction>> = callbackFlow {
         val subscription = transactionsCollection
             .orderBy("createdAt", Query.Direction.DESCENDING)
@@ -206,66 +207,84 @@ class PaymentService : PaymentRepository {
                     close(error)
                     return@addSnapshotListener
                 }
-                
+
                 val transactions = snapshot?.documents?.mapNotNull { doc ->
                     doc.toObject(PaymentTransaction::class.java)
                 } ?: emptyList()
-                
+
                 trySend(transactions)
             }
-        
+
         awaitClose { subscription.remove() }
     }
-    
+
     // Métodos auxiliares
     private fun generateTransactionId(): String {
         return "TXN_${System.currentTimeMillis()}_${Random().nextInt(1000)}"
     }
-    
+
     private fun generateYapeQRCode(amount: Double, transactionId: String): String {
         val phone = "978318805" // Tu número Yape
         val data = "yape://pay?phone=$phone&amount=$amount"
         return "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=$data"
     }
-    
+
     private fun generateYapePaymentUrl(transactionId: String): String {
         return "yape://pay?id=$transactionId"
     }
-    
+
     private fun generatePlinQRCode(amount: Double, transactionId: String): String {
         return "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=plin://pay?amount=$amount&id=$transactionId"
     }
-    
+
     private fun generatePlinPaymentUrl(transactionId: String): String {
         return "plin://pay?id=$transactionId"
     }
-    
+
     private fun generatePayPalPaymentUrl(amount: Double, transactionId: String): String {
         return "https://www.paypal.com/pay?amount=$amount&transaction_id=$transactionId"
     }
-    
+
     private fun generateCreditCardPaymentUrl(amount: Double, transactionId: String): String {
         return "https://payment.gateway.com/pay?amount=$amount&transaction_id=$transactionId"
     }
-    
+
     private suspend fun updateTransactionWithPaymentInfo(
-        transactionId: String, 
-        qrCodeUrl: String?, 
+        transactionId: String,
+        qrCodeUrl: String?,
         paymentUrl: String?
     ) {
         val updates = mutableMapOf<String, Any>(
             "updatedAt" to Date()
         )
-        
+
         qrCodeUrl?.let { updates["qrCodeUrl"] = it }
         paymentUrl?.let { updates["paymentUrl"] = it }
-        
+
         transactionsCollection.document(transactionId).update(updates).await()
     }
-    
+
     private suspend fun checkPaymentStatusWithProvider(transaction: PaymentTransaction): PaymentStatus {
         // En producción, aquí verificarías el estado real con la API del proveedor
         // Por ahora simulamos que el pago está pendiente
         return PaymentStatus.PENDING
+    }
+
+    suspend fun updateTransactionStatusByOrderId(orderId: String, status: PaymentStatus): Result<Boolean> {
+        return try {
+            val querySnapshot = transactionsCollection.whereEqualTo("orderId", orderId).get().await()
+            if (!querySnapshot.isEmpty) {
+                for (document in querySnapshot.documents) {
+                    transactionsCollection.document(document.id)
+                        .update("status", status.name, "updatedAt", Date())
+                        .await()
+                }
+                Result.success(true)
+            } else {
+                Result.failure(Exception("No se encontró transacción con orderId: $orderId"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 } 
