@@ -1,3 +1,5 @@
+
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -47,7 +49,7 @@ dependencies {
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-firestore")
     implementation("com.google.firebase:firebase-storage")
-
+    implementation("androidx.viewpager2:viewpager2:1.0.0")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -81,6 +83,7 @@ dependencies {
     // Google Play Services
     implementation ("com.google.android.gms:play-services-auth:21.0.0")
     implementation ("com.google.android.gms:play-services-maps:18.2.0")
+
     
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

@@ -27,6 +27,10 @@ class HomeViewModel : ViewModel() {
     private val _categories = MutableStateFlow<List<Category>>(emptyList())
     val categories: StateFlow<List<Category>> = _categories
 
+    private val _bannerProducts = MutableStateFlow<List<Product>>(emptyList())
+    val bannerProducts: StateFlow<List<Product>> = _bannerProducts
+
+
     private val firestore = FirebaseFirestore.getInstance()
     private val favoriteRepository = FavoriteRepository()
     private val cartRepository = CartRepository()
@@ -38,10 +42,48 @@ class HomeViewModel : ViewModel() {
 
     // Cargar categorías desde Firebase al iniciar
     init {
-        loadCategoriesFromFirebase()
         loadProductsWithFavorites()
+        loadBannerProducts()
         // Registrar listener para cambios en favoritos
         FavoriteService.addFavoriteChangeListener(favoriteChangeCallback)
+    }
+    private fun loadBannerProducts() {
+        // Paso 1: Cargar todas las categorías
+        firestore.collection("categories")
+            .get()
+            .addOnSuccessListener { categoriesSnapshot ->
+                val categoryIds = categoriesSnapshot.documents.mapNotNull { it.getString("id") }
+
+                // Paso 2: Para cada categoría, cargar un producto
+                val productRef = firestore.collection("products")
+
+                categoryIds.forEach { categoryId ->
+                    productRef.whereEqualTo("categoryId", categoryId)
+                        .limit(1)
+                        .get()
+                        .addOnSuccessListener { productSnapshot ->
+                            if (!productSnapshot.isEmpty) {
+                                val product = productSnapshot.documents.first().toObject(Product::class.java)
+                                updateBannerProducts(product)
+                            }
+                        }
+                        .addOnFailureListener { exception ->
+                            Log.e("HomeViewModel", "Error al cargar producto de $categoryId", exception)
+                        }
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.e("HomeViewModel", "Error al cargar categorías", exception)
+            }
+    }
+
+    private var bannerProductList = mutableListOf<Product>()
+
+    private fun updateBannerProducts(product: Product?) {
+        product?.let {
+            bannerProductList.add(it)
+            _bannerProducts.value = bannerProductList
+        }
     }
     
     override fun onCleared() {
@@ -84,17 +126,7 @@ class HomeViewModel : ViewModel() {
     }
 
     // Cargar categorías desde Firebase
-    private fun loadCategoriesFromFirebase() {
-        firestore.collection("categories")
-            .get()
-            .addOnSuccessListener { result ->
-                val categoryList = result.toObjects(Category::class.java)
-                _categories.value = categoryList
-            }
-            .addOnFailureListener { exception ->
-                Log.e("HomeViewModel", "Error al cargar categorías", exception)
-            }
-    }
+
 
     // Cargar productos y verificar su estado de favoritos
     private fun loadProductsWithFavorites() {

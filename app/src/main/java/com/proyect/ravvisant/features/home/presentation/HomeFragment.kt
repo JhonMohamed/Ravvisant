@@ -1,7 +1,10 @@
 package com.proyect.ravvisant.features.home.presentation
 
+import BannerAdapter
 import android.os.Bundle
 import android.util.Log
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +15,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.tabs.TabLayoutMediator
 import com.proyect.ravvisant.R
 import com.proyect.ravvisant.core.common.ProductClickCallback
 import com.proyect.ravvisant.databinding.FragmentHomeBinding
@@ -23,11 +28,12 @@ import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
     private val TAG = "HomeFragment"
-    
+
     private lateinit var binding: FragmentHomeBinding
     private lateinit var viewModel: HomeViewModel
     private lateinit var adapter: HomeProductAdapter
     private lateinit var categoryAdapter: CategoryAdapter
+    private lateinit var bannerAdapter: BannerAdapter
 
 
     override fun onCreateView(
@@ -35,22 +41,89 @@ class HomeFragment : Fragment() {
     ): View {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        
         try {
             viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
 
             //Configuracion de adaptadores
             setupProductRecyclerView()
-            setupCategoryRecyclerView()
+            setupBannerCarousel()
             //Observa datos
             observeViewModel()
         } catch (e: Exception) {
             Log.e(TAG, "Error in onViewCreated", e)
         }
+    }
+    private var currentPage = 0
+    private lateinit var handler: Handler
+    private val updateRunnable = Runnable {
+        if (currentPage == bannerAdapter.itemCount) {
+            currentPage = 0
+        }
+        binding.viewPagerBanner.setCurrentItem(currentPage++, true)
+    }
+
+    private fun startAutoScroll() {
+        handler = Handler(Looper.getMainLooper())
+        handler.postDelayed(object : Runnable {
+            override fun run() {
+                if (currentPage == bannerAdapter.itemCount) {
+                    currentPage = 0
+                }
+                binding.viewPagerBanner.setCurrentItem(currentPage++, true)
+                handler.postDelayed(this, 3000) // Cada 3 segundos
+            }
+        }, 3000)
+    }
+
+
+    private fun setupBannerCarousel() {
+        bannerAdapter = BannerAdapter(requireContext()) { product ->
+            val bundle = Bundle()
+            bundle.putString("productId", product.id)
+            findNavController().navigate(R.id.productDetailFragment, bundle)
+        }
+
+        binding.viewPagerBanner.adapter = bannerAdapter
+        binding.viewPagerBanner.orientation = ViewPager2.ORIENTATION_HORIZONTAL
+
+
+        // Navegación manual con flechas
+        binding.btnNext.setOnClickListener {
+            val nextItem = binding.viewPagerBanner.currentItem + 1
+            if (nextItem < bannerAdapter.itemCount) {
+                binding.viewPagerBanner.setCurrentItem(nextItem, true)
+            } else {
+                binding.viewPagerBanner.setCurrentItem(0, true)
+            }
+        }
+
+        binding.btnPrev.setOnClickListener {
+            val prevItem = binding.viewPagerBanner.currentItem - 1
+            if (prevItem >= 0) {
+                binding.viewPagerBanner.setCurrentItem(prevItem, true)
+            } else {
+                binding.viewPagerBanner.setCurrentItem(bannerAdapter.itemCount - 1, true)
+            }
+        }
+        binding.viewPagerBanner.setPageTransformer { page, position ->
+            val alpha = 0.3f.coerceAtLeast(1 - Math.abs(position))
+            page.alpha = alpha
+        }
+
+        // Mantiene cargada solo una página adicional a cada lado
+        binding.viewPagerBanner.offscreenPageLimit = 1
+
+        // Añade padding para mostrar parte de las páginas lateral
+        binding.viewPagerBanner.clipToPadding = false
+        binding.viewPagerBanner.setPadding(16, 0, 16, 0)
+
+        // Si ya tienes auto-scroll:
+        startAutoScroll()
     }
 
     private fun setupProductRecyclerView() {
@@ -93,24 +166,6 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun setupCategoryRecyclerView() {
-        try {
-            categoryAdapter = CategoryAdapter { category ->
-                try {
-                    // Aquí recibes la categoría seleccionada
-                    viewModel.filterProductsByCategory(category.id)
-                } catch (e: Exception) {
-                    Log.e(TAG, "Error in category selection", e)
-                }
-            }
-            binding.rvCategories.apply {
-                layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-                adapter = categoryAdapter
-            }
-        } catch (e: Exception) {
-            Log.e(TAG, "Error in setupCategoryRecyclerView", e)
-        }
-    }
 
     private fun observeViewModel() {
         try {
@@ -133,6 +188,16 @@ class HomeFragment : Fragment() {
                             }
                         } catch (e: Exception) {
                             Log.e(TAG, "Error collecting categories", e)
+                        }
+                    }
+
+                    launch {
+                        try {
+                            viewModel.bannerProducts.collect { bannerProducts ->
+                                bannerAdapter.submitList(bannerProducts)
+                            }
+                        } catch (e: Exception) {
+                            Log.e(TAG, "Error collecting banner products", e)
                         }
                     }
                 }
