@@ -19,7 +19,17 @@
 
         <activity
             android:name=".MainActivity"
-            android:exported="false" />
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="com.proyect.ravvisant"
+                    android:host="paypal"
+                    android:path="/return" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".features.auth.LoginActivity"
             android:exported="true">
