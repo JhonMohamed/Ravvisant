@@ -1,6 +1,7 @@
 package com.proyect.ravvisant.features.cart
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -20,6 +21,7 @@ import com.proyect.ravvisant.features.cart.adapter.CartAdapter
 import com.proyect.ravvisant.features.cart.viewmodel.CartViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import androidx.cardview.widget.CardView
 
 class CartShopFragment : Fragment() {
     private val viewModel: CartViewModel by viewModels()
@@ -41,6 +43,7 @@ class CartShopFragment : Fragment() {
         viewModel.startListeningCart()
         observeCartItems()
         setupBottomBar(view)
+        setupNavigationActions(view)
     }
 
     private fun setupToolbar(view: View) {
@@ -76,6 +79,10 @@ class CartShopFragment : Fragment() {
             },
             onRemoveItem = { productId ->
                 viewModel.removeFromCart(productId)
+            },
+            onQuantityChangeFailed = { message ->
+                // Mostrar mensaje de error al usuario
+                Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
             }
         )
 
@@ -140,6 +147,29 @@ class CartShopFragment : Fragment() {
         }
         btnProceedToPay.setOnClickListener {
             findNavController().navigate(R.id.payFragment)
+        }
+    }
+
+    private fun setupNavigationActions(view: View) {
+        val cvFavorits = view.findViewById<CardView>(R.id.cvFavorits)
+        val cvShop = view.findViewById<CardView>(R.id.cvShop)
+
+        cvFavorits?.setOnClickListener {
+            findNavController().navigate(R.id.favoriteFragment)
+            setBottomNavSelected(R.id.favoriteFragment)
+        }
+        cvShop?.setOnClickListener {
+            findNavController().navigate(R.id.cartFragment)
+            setBottomNavSelected(R.id.cartFragment)
+        }
+    }
+
+    private fun setBottomNavSelected(fragmentId: Int) {
+        val activity = requireActivity()
+        val bottomNav = activity.findViewById<com.proyect.ravvisant.core.utils.BadgeBottomNavigationView>(R.id.bottomNavigationView)
+        when (fragmentId) {
+            R.id.favoriteFragment -> bottomNav?.selectedItemId = R.id.favoriteFragment
+            R.id.cartFragment -> bottomNav?.selectedItemId = R.id.cartFragment
         }
     }
 }

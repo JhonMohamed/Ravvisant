@@ -2,6 +2,7 @@ package com.proyect.ravvisant.features.cart.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -13,7 +14,8 @@ import com.proyect.ravvisant.domain.model.CartItem
 
 class CartAdapter(
     private val onQuantityChanged: (String, Int) -> Unit,
-    private val onRemoveItem: (String) -> Unit
+    private val onRemoveItem: (String) -> Unit,
+    private val onQuantityChangeFailed: (String) -> Unit = {}
 ) : ListAdapter<CartItem, CartAdapter.CartViewHolder>(CartDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CartViewHolder {

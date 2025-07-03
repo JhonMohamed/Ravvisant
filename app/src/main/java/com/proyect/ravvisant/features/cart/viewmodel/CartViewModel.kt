@@ -1,5 +1,6 @@
 package com.proyect.ravvisant.features.cart.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.proyect.ravvisant.domain.model.CartItem
@@ -11,6 +12,7 @@ import com.google.firebase.firestore.ListenerRegistration
 import kotlinx.coroutines.flow.map
 
 class CartViewModel : ViewModel() {
+    private val TAG = "CartViewModel"
     private val repository = CartRepository()
     private val _cartItems = MutableStateFlow<List<CartItem>>(emptyList())
     val cartItems: StateFlow<List<CartItem>> = _cartItems
@@ -51,7 +53,12 @@ class CartViewModel : ViewModel() {
     fun updateQuantity(productId: String, quantity: Int) {
         viewModelScope.launch {
             val success = repository.updateQuantity(productId, quantity)
-            if (success) startListeningCart()
+            if (success) {
+                startListeningCart()
+            } else {
+                Log.w(TAG, "Failed to update quantity for product $productId to $quantity")
+                // Aquí podrías emitir un evento de error si es necesario
+            }
         }
     }
 

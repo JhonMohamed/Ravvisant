@@ -9,6 +9,9 @@ object FavoriteService {
     private val firestore = FirebaseFirestore.getInstance()
     private val auth = FirebaseAuth.getInstance()
     
+    // Lista de callbacks para notificar cambios en favoritos
+    private val favoriteChangeCallbacks = mutableListOf<(String, Boolean) -> Unit>()
+    
     private fun getCurrentUserId(): String? {
         return auth.currentUser?.uid
     }
@@ -16,6 +19,27 @@ object FavoriteService {
     private fun getFavoritesCollection() = firestore.collection("users")
         .document(getCurrentUserId() ?: "")
         .collection("favorites")
+    
+    // Función para registrar callbacks de cambios en favoritos
+    fun addFavoriteChangeListener(callback: (String, Boolean) -> Unit) {
+        favoriteChangeCallbacks.add(callback)
+    }
+    
+    // Función para remover callbacks
+    fun removeFavoriteChangeListener(callback: (String, Boolean) -> Unit) {
+        favoriteChangeCallbacks.remove(callback)
+    }
+    
+    // Función para notificar cambios a todos los listeners
+    private fun notifyFavoriteChange(productId: String, isFavorite: Boolean) {
+        favoriteChangeCallbacks.forEach { callback ->
+            try {
+                callback(productId, isFavorite)
+            } catch (e: Exception) {
+                // Ignorar errores en callbacks individuales
+            }
+        }
+    }
     
     suspend fun getFavorites(): List<Product> {
         return try {
@@ -33,6 +57,8 @@ object FavoriteService {
         return try {
             val userId = getCurrentUserId() ?: return false
             getFavoritesCollection().document(product.id).set(product).await()
+            // Notificar el cambio
+            notifyFavoriteChange(product.id, true)
             true
         } catch (e: Exception) {
             false
@@ -43,6 +69,8 @@ object FavoriteService {
         return try {
             val userId = getCurrentUserId() ?: return false
             getFavoritesCollection().document(productId).delete().await()
+            // Notificar el cambio
+            notifyFavoriteChange(productId, false)
             true
         } catch (e: Exception) {
             false
