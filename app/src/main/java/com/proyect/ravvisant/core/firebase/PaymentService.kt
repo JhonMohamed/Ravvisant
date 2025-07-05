@@ -55,7 +55,7 @@ class PaymentService : PaymentRepository {
         }
     }
 
-    private suspend fun processYapePayment(
+    suspend fun processYapePayment(
         paymentRequest: PaymentRequest,
         transactionId: String
     ): PaymentResponse {
@@ -78,7 +78,7 @@ class PaymentService : PaymentRepository {
         )
     }
 
-    private suspend fun processPlinPayment(
+    suspend fun processPlinPayment(
         paymentRequest: PaymentRequest,
         transactionId: String
     ): PaymentResponse {
@@ -285,6 +285,21 @@ class PaymentService : PaymentRepository {
             }
         } catch (e: Exception) {
             Result.failure(e)
+        }
+    }
+
+    suspend fun getTransactionByOrderId(orderId: String): PaymentTransaction? {
+        return try {
+            val querySnapshot = transactionsCollection.whereEqualTo("orderId", orderId).get().await()
+            if (!querySnapshot.isEmpty) {
+                val document = querySnapshot.documents.first()
+                document.toObject(PaymentTransaction::class.java)
+            } else {
+                null
+            }
+        } catch (e: Exception) {
+            Log.e("PaymentService", "Error getting transaction by orderId: $orderId", e)
+            null
         }
     }
 } 

@@ -28,24 +28,24 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/rvCategories" />
-        <Button
-            android:id="@+id/btnUploadCategories"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Subir Categorías"
-            android:layout_marginTop="8dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnShowAll" />
-        <Button
-            android:id="@+id/btnUploadProducts"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/btnUploadCategories"
-            android:text="Subir productos a Firebase"
-            android:layout_marginTop="16dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+<!--        <Button-->
+<!--            android:id="@+id/btnUploadCategories"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="Subir Categorías"-->
+<!--            android:layout_marginTop="8dp"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/btnShowAll" />-->
+<!--        <Button-->
+<!--            android:id="@+id/btnUploadProducts"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/btnUploadCategories"-->
+<!--            android:text="Subir productos a Firebase"-->
+<!--            android:layout_marginTop="16dp"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent" />-->
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerProducts"
@@ -58,7 +58,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnUploadProducts"
+            app:layout_constraintTop_toBottomOf="@id/btnShowAll"
             app:spanCount="2"
             tools:listitem="@layout/item_product_grid" />
 

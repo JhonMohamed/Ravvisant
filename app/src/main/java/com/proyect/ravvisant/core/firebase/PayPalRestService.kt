@@ -17,6 +17,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.IOException
+import java.util.concurrent.TimeUnit
 
 /**
  * Servicio de PayPal usando la API REST
@@ -34,12 +35,21 @@ class PayPalRestService {
         // Endpoints
         private const val CREATE_ORDER_ENDPOINT = "/v2/checkout/orders"
         private const val CAPTURE_ORDER_ENDPOINT = "/v2/checkout/orders/{order_id}/capture"
+        private const val GET_ACCESS_TOKEN_ENDPOINT = "/v1/oauth2/token"
 
         // Request codes
         const val PAYPAL_REQUEST_CODE = 123
+        
+        // Timeouts
+        private const val CONNECT_TIMEOUT = 30L
+        private const val READ_TIMEOUT = 30L
+        private const val WRITE_TIMEOUT = 30L
     }
 
     private val client = OkHttpClient.Builder()
+        .connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
+        .readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
+        .writeTimeout(WRITE_TIMEOUT, TimeUnit.SECONDS)
         .addInterceptor(HttpLoggingInterceptor().apply {
             level = if (PayPalEnvironment.isSandbox()) {
                 HttpLoggingInterceptor.Level.BODY
@@ -47,6 +57,17 @@ class PayPalRestService {
                 HttpLoggingInterceptor.Level.BASIC
             }
         })
+        .addInterceptor { chain ->
+            val original = chain.request()
+            val requestBuilder = original.newBuilder()
+                .header("Accept", "application/json")
+                .header("Accept-Language", "en_US")
+                .method(original.method, original.body)
+            
+            val request = requestBuilder.build()
+            Log.d(TAG, "Making request to: ${request.url}")
+            chain.proceed(request)
+        }
         .build()
 
     /**
@@ -57,6 +78,21 @@ class PayPalRestService {
     ): Result<PaymentResponse> = withContext(Dispatchers.IO) {
 
         try {
+            Log.d(TAG, "Creating PayPal order for amount: ${paymentRequest.amount} ${paymentRequest.currency}")
+            
+            // Validar el monto
+            if (paymentRequest.amount <= 0) {
+                Log.e(TAG, "Invalid amount: ${paymentRequest.amount}")
+                return@withContext Result.failure(Exception("El monto debe ser mayor a 0"))
+            }
+
+            // Obtener access token
+            val accessToken = getAccessToken()
+            if (accessToken.isNullOrEmpty()) {
+                Log.e(TAG, "Failed to get access token")
+                return@withContext Result.failure(Exception("No se pudo obtener el token de acceso"))
+            }
+
             // Crear el JSON para la orden
             val orderJson = JSONObject().apply {
                 put("intent", "CAPTURE")
@@ -68,6 +104,7 @@ class PayPalRestService {
                         })
                         put("description", paymentRequest.description)
                         put("custom_id", paymentRequest.orderId)
+                        put("invoice_id", paymentRequest.orderId)
                     })
                 })
                 put("application_context", JSONObject().apply {
@@ -75,20 +112,26 @@ class PayPalRestService {
                     put("cancel_url", "com.proyect.ravvisant://paypal/cancel")
                     put("brand_name", PayPalConfig.MERCHANT_NAME)
                     put("user_action", "PAY_NOW")
+                    put("shipping_preference", "NO_SHIPPING")
                 })
             }
+
+            Log.d(TAG, "Order JSON: ${orderJson.toString(2)}")
 
             // Crear la request
             val request = Request.Builder()
                 .url("${getBaseUrl()}$CREATE_ORDER_ENDPOINT")
                 .addHeader("Content-Type", "application/json")
-                .addHeader("Authorization", "Bearer ${getAccessToken()}")
+                .addHeader("Authorization", "Bearer $accessToken")
                 .post(orderJson.toString().toRequestBody("application/json".toMediaType()))
                 .build()
 
             // Ejecutar la request
             val response = client.newCall(request).execute()
             val responseBody = response.body?.string()
+
+            Log.d(TAG, "PayPal response code: ${response.code}")
+            Log.d(TAG, "PayPal response body: $responseBody")
 
             if (response.isSuccessful && responseBody != null) {
                 val responseJson = JSONObject(responseBody)
@@ -107,6 +150,8 @@ class PayPalRestService {
 
                 if (approvalUrl.isNotEmpty()) {
                     Log.d(TAG, "PayPal order created successfully: $orderId")
+                    Log.d(TAG, "Approval URL: $approvalUrl")
+                    
                     Result.success(
                         PaymentResponse(
                             success = true,
@@ -118,11 +163,20 @@ class PayPalRestService {
                         )
                     )
                 } else {
-                    Result.failure(Exception("No se encontró URL de aprobación"))
+                    Log.e(TAG, "No approval URL found in response")
+                    Result.failure(Exception("No se encontró URL de aprobación en la respuesta"))
                 }
             } else {
+                val errorMessage = try {
+                    val errorJson = JSONObject(responseBody ?: "")
+                    errorJson.getJSONArray("details")?.getJSONObject(0)?.getString("message") 
+                        ?: "Error al crear orden de PayPal: ${response.code}"
+                } catch (e: Exception) {
+                    "Error al crear orden de PayPal: ${response.code}"
+                }
+                
                 Log.e(TAG, "Error creating PayPal order: ${response.code} - $responseBody")
-                Result.failure(Exception("Error al crear orden de PayPal: ${response.code}"))
+                Result.failure(Exception(errorMessage))
             }
 
         } catch (e: Exception) {
@@ -137,40 +191,67 @@ class PayPalRestService {
     suspend fun capturePayPalOrder(orderId: String): Result<PaymentResponse> = withContext(Dispatchers.IO) {
 
         try {
+            Log.d(TAG, "Capturing PayPal order: $orderId")
+            
+            // Obtener access token
+            val accessToken = getAccessToken()
+            if (accessToken.isNullOrEmpty()) {
+                Log.e(TAG, "Failed to get access token for capture")
+                return@withContext Result.failure(Exception("No se pudo obtener el token de acceso"))
+            }
+
             val request = Request.Builder()
                 .url("${getBaseUrl()}${CAPTURE_ORDER_ENDPOINT.replace("{order_id}", orderId)}")
                 .addHeader("Content-Type", "application/json")
-                .addHeader("Authorization", "Bearer ${getAccessToken()}")
+                .addHeader("Authorization", "Bearer $accessToken")
                 .post("".toRequestBody("application/json".toMediaType()))
                 .build()
 
             val response = client.newCall(request).execute()
             val responseBody = response.body?.string()
 
+            Log.d(TAG, "Capture response code: ${response.code}")
+            Log.d(TAG, "Capture response body: $responseBody")
+
             if (response.isSuccessful && responseBody != null) {
                 val responseJson = JSONObject(responseBody)
-                val captureId = responseJson.getJSONArray("purchase_units")
-                    .getJSONObject(0)
-                    .getJSONArray("payments")
-                    .getJSONObject(0)
-                    .getJSONArray("captures")
-                    .getJSONObject(0)
-                    .getString("id")
+                val status = responseJson.getString("status")
+                
+                if (status == "COMPLETED") {
+                    val captureId = responseJson.getJSONArray("purchase_units")
+                        .getJSONObject(0)
+                        .getJSONArray("payments")
+                        .getJSONObject(0)
+                        .getJSONArray("captures")
+                        .getJSONObject(0)
+                        .getString("id")
 
-                Log.d(TAG, "PayPal order captured successfully: $captureId")
-                Result.success(
-                    PaymentResponse(
-                        success = true,
-                        transactionId = captureId,
-                        qrCodeUrl = null,
-                        paymentUrl = null,
-                        message = "Pago capturado exitosamente",
-                        status = PaymentStatus.COMPLETED
+                    Log.d(TAG, "PayPal order captured successfully: $captureId")
+                    Result.success(
+                        PaymentResponse(
+                            success = true,
+                            transactionId = captureId,
+                            qrCodeUrl = null,
+                            paymentUrl = null,
+                            message = "Pago capturado exitosamente",
+                            status = PaymentStatus.COMPLETED
+                        )
                     )
-                )
+                } else {
+                    Log.e(TAG, "PayPal order not completed, status: $status")
+                    Result.failure(Exception("La orden no se completó. Estado: $status"))
+                }
             } else {
+                val errorMessage = try {
+                    val errorJson = JSONObject(responseBody ?: "")
+                    errorJson.getJSONArray("details")?.getJSONObject(0)?.getString("message") 
+                        ?: "Error al capturar orden de PayPal: ${response.code}"
+                } catch (e: Exception) {
+                    "Error al capturar orden de PayPal: ${response.code}"
+                }
+                
                 Log.e(TAG, "Error capturing PayPal order: ${response.code} - $responseBody")
-                Result.failure(Exception("Error al capturar orden de PayPal: ${response.code}"))
+                Result.failure(Exception(errorMessage))
             }
 
         } catch (e: Exception) {
@@ -180,36 +261,47 @@ class PayPalRestService {
     }
 
     /**
-     * Obtiene el token de acceso de PayPal
+     * Obtiene el access token de PayPal
      */
-    private suspend fun getAccessToken(): String = withContext(Dispatchers.IO) {
+    private suspend fun getAccessToken(): String? = withContext(Dispatchers.IO) {
         try {
+            Log.d(TAG, "Getting PayPal access token")
+            
             val credentials = "${PayPalConfig.CLIENT_ID}:${getSecretKey()}"
             val encodedCredentials = android.util.Base64.encodeToString(
-                credentials.toByteArray(),
+                credentials.toByteArray(), 
                 android.util.Base64.NO_WRAP
             )
 
+            val requestBody = "grant_type=client_credentials".toRequestBody(
+                "application/x-www-form-urlencoded".toMediaType()
+            )
+
             val request = Request.Builder()
-                .url("${getBaseUrl()}/v1/oauth2/token")
+                .url("${getBaseUrl()}$GET_ACCESS_TOKEN_ENDPOINT")
                 .addHeader("Authorization", "Basic $encodedCredentials")
                 .addHeader("Content-Type", "application/x-www-form-urlencoded")
-                .post("grant_type=client_credentials".toRequestBody("application/x-www-form-urlencoded".toMediaType()))
+                .post(requestBody)
                 .build()
 
             val response = client.newCall(request).execute()
             val responseBody = response.body?.string()
 
+            Log.d(TAG, "Access token response code: ${response.code}")
+
             if (response.isSuccessful && responseBody != null) {
-                val responseJson = JSONObject(responseBody)
-                responseJson.getString("access_token")
+                val jsonResponse = JSONObject(responseBody)
+                val accessToken = jsonResponse.getString("access_token")
+                Log.d(TAG, "Access token obtained successfully")
+                accessToken
             } else {
-                throw Exception("Error obteniendo token de acceso: ${response.code}")
+                Log.e(TAG, "Failed to get access token: ${response.code} - $responseBody")
+                null
             }
 
         } catch (e: Exception) {
-            Log.e(TAG, "Error getting access token", e)
-            throw e
+            Log.e(TAG, "Exception getting access token", e)
+            null
         }
     }
 
@@ -225,17 +317,24 @@ class PayPalRestService {
     }
 
     /**
-     * Obtiene el Secret Key (en producción esto debería venir de un lugar seguro)
+     * Obtiene la secret key (en producción esto debería venir del backend)
      */
     private fun getSecretKey(): String {
-        // En producción, esto debería venir de variables de entorno o un lugar seguro
-        return "EEelf8zkwA2pvOfnHa1a81l_SVuwmkw4QgQpJsPX8YG4dlo6LcmMOUV5oBP_YexbyWUSEEV1Xb_l-E5y"
+        // ⚠️ ADVERTENCIA: En producción, NUNCA incluyas el secret key en la app móvil
+        // Deberías hacer las llamadas que requieren el secret key desde tu backend
+        return if (PayPalEnvironment.isSandbox()) {
+            "EEelf8zkwA2pvOfnHa1a81l_SVuwmkw4QgQpJsPX8YG4dlo6LcmMOUV5oBP_YexbyWUSEEV1Xb_l-E5y"
+        } else {
+            // En producción, esto debería ser manejado por tu backend
+            throw IllegalStateException("Secret key no disponible en producción")
+        }
     }
 
     /**
      * Abre PayPal en el navegador
      */
     fun openPayPalInBrowser(url: String): Intent {
+        Log.d(TAG, "Opening PayPal URL in browser: $url")
         return Intent(Intent.ACTION_VIEW, Uri.parse(url))
     }
 
@@ -243,8 +342,11 @@ class PayPalRestService {
      * Valida la configuración de PayPal
      */
     fun validateConfiguration(): Boolean {
-        return PayPalConfig.isConfigured() &&
+        val isValid = PayPalConfig.isConfigured() &&
                 PayPalConfig.CLIENT_ID.isNotEmpty() &&
                 getSecretKey().isNotEmpty()
+        
+        Log.d(TAG, "PayPal configuration validation: $isValid")
+        return isValid
     }
 }

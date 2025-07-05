@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -16,8 +17,10 @@ import com.proyect.ravvisant.R
 import com.proyect.ravvisant.core.common.ProductClickCallback
 import com.proyect.ravvisant.databinding.FragmentFavoriteBinding
 import com.proyect.ravvisant.domain.model.Product
+import com.proyect.ravvisant.domain.model.CartItem
 import com.proyect.ravvisant.features.favorites.adapter.FavoriteAdapter
 import com.proyect.ravvisant.features.favorites.viewmodel.FavoriteViewModel
+import com.proyect.ravvisant.features.cart.viewmodel.CartViewModel
 import kotlinx.coroutines.launch
 
 // TODO: Rename parameter arguments, choose names that match
@@ -40,6 +43,7 @@ class FavoriteFragment : Fragment() {
     
     private val viewModel: FavoriteViewModel by viewModels()
     private lateinit var adapter: FavoriteAdapter
+    private val cartViewModel: CartViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,8 +77,15 @@ class FavoriteFragment : Fragment() {
             }
 
             override fun onAddToCartClick(product: Product) {
-                // Implementar lógica para agregar al carrito
-                Toast.makeText(requireContext(), "Agregado al carrito", Toast.LENGTH_SHORT).show()
+                val cartItem = CartItem(
+                    id = product.id,
+                    name = product.name,
+                    imageUrl = product.imageUrl,
+                    price = product.price,
+                    quantity = 1
+                )
+                cartViewModel.addToCart(cartItem)
+                Toast.makeText(requireContext(), "${product.name} agregado al carrito", Toast.LENGTH_SHORT).show()
             }
 
             override fun onProductClick(product: Product) {

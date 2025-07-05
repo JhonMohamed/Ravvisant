@@ -1,6 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <network-security-config>
+    <!-- Configuración para desarrollo local -->
     <domain-config cleartextTrafficPermitted="true">
         <domain includeSubdomains="true">192.168.224.188</domain>
     </domain-config>
+    
+    <!-- Configuración para PayPal -->
+    <domain-config>
+        <domain includeSubdomains="true">api-m.sandbox.paypal.com</domain>
+        <domain includeSubdomains="true">api-m.paypal.com</domain>
+        <domain includeSubdomains="true">www.sandbox.paypal.com</domain>
+        <domain includeSubdomains="true">www.paypal.com</domain>
+        <domain includeSubdomains="true">checkout.paypal.com</domain>
+        <domain includeSubdomains="true">sandbox.paypal.com</domain>
+    </domain-config>
+    
+    <!-- Configuración base para todas las conexiones -->
+    <base-config cleartextTrafficPermitted="false">
+        <trust-anchors>
+            <certificates src="system"/>
+        </trust-anchors>
+    </base-config>
 </network-security-config>

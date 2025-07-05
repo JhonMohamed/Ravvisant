@@ -154,13 +154,13 @@ object PayPalUtils {
             return buildString {
                 appendLine("PayPal Configuration Validation:")
                 if (isValid) {
-                    appendLine("✅ Configuration is valid")
+                    appendLine("Configuration is valid")
                 } else {
-                    appendLine("❌ Configuration has errors:")
+                    appendLine("Configuration has errors:")
                     errors.forEach { appendLine("  - $it") }
                 }
                 if (warnings.isNotEmpty()) {
-                    appendLine("⚠️  Warnings:")
+                    appendLine("Warnings:")
                     warnings.forEach { appendLine("  - $it") }
                 }
             }

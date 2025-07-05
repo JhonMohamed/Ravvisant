@@ -48,6 +48,10 @@ class PayFragment : Fragment() {
     private var currentAmount: Double = 0.0
     private var currentPayPalOrderId: String? = null
 
+    companion object {
+        private const val TAG = "PayFragment"
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -59,6 +63,8 @@ class PayFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        Log.d(TAG, "PayFragment created")
+        
         setupUI()
         setupObservers()
         setupClickListeners()
@@ -69,6 +75,7 @@ class PayFragment : Fragment() {
                 cartViewModel.cartItems.collectLatest { items ->
                     val cantidad = items.sumOf { it.quantity }
                     binding.tvProductos.text = "Productos ($cantidad)"
+                    Log.d(TAG, "Cart items updated: $cantidad items")
                 }
             }
         }
@@ -78,6 +85,7 @@ class PayFragment : Fragment() {
                     currentAmount = total
                     binding.tvTotalPay.text = "S/ ${String.format("%.2f", total)}"
                     binding.tvPayProducts.text = "S/ ${String.format("%.2f", total)}"
+                    Log.d(TAG, "Total amount updated: $total")
                 }
             }
         }
@@ -91,22 +99,31 @@ class PayFragment : Fragment() {
         currentAmount = 9219.91
         binding.tvTotalPay.text = "S/ ${String.format("%.2f", currentAmount)}"
         binding.tvPayProducts.text = "S/ ${String.format("%.2f", currentAmount)}"
+        
+        Log.d(TAG, "UI setup completed with amount: $currentAmount")
     }
 
     private fun setupObservers() {
         viewModel.paymentState.observe(viewLifecycleOwner) { state ->
+            Log.d(TAG, "Payment state changed: $state")
+            
             when (state) {
                 is PaymentState.Idle -> {
                     // Estado inicial, no hacer nada
+                    Log.d(TAG, "Payment state: Idle")
                 }
                 is PaymentState.Loading -> {
                     showLoading(true)
+                    Log.d(TAG, "Payment state: Loading")
                 }
                 is PaymentState.Success -> {
                     showLoading(false)
+                    Log.d(TAG, "Payment state: Success - ${state.response.message}")
+                    
                     if (state.response.paymentUrl != null) {
                         // Es una respuesta de PayPal, abrir en navegador
                         currentPayPalOrderId = state.response.transactionId
+                        Log.d(TAG, "Opening PayPal URL: ${state.response.paymentUrl}")
                         openPayPalInBrowser(state.response.paymentUrl)
                     } else {
                         // Es una respuesta de otro método de pago
@@ -115,26 +132,32 @@ class PayFragment : Fragment() {
                 }
                 is PaymentState.PaymentPending -> {
                     showLoading(false)
+                    Log.d(TAG, "Payment state: Pending")
                     Toast.makeText(context, "Pago pendiente", Toast.LENGTH_SHORT).show()
                 }
                 is PaymentState.PaymentCompleted -> {
                     showLoading(false)
+                    Log.d(TAG, "Payment state: Completed")
                     showPaymentSuccessDialog()
                 }
                 is PaymentState.Error -> {
                     showLoading(false)
-                    Toast.makeText(context, state.message, Toast.LENGTH_LONG).show()
+                    Log.e(TAG, "Payment state: Error - ${state.message}")
+                    showErrorDialog(state.message)
                 }
                 is PaymentState.OpenPaymentApp -> {
+                    Log.d(TAG, "Payment state: OpenPaymentApp - ${state.url}")
                     openPaymentApp(state.url)
                 }
                 is PaymentState.PayPalReady -> {
+                    Log.d(TAG, "Payment state: PayPalReady")
                     createPayPalOrder(state.paymentRequest)
                 }
             }
         }
 
         viewModel.selectedPaymentMethod.observe(viewLifecycleOwner) { method ->
+            Log.d(TAG, "Selected payment method: $method")
             updatePaymentMethodSelection(method)
         }
     }
@@ -142,24 +165,28 @@ class PayFragment : Fragment() {
     private fun setupClickListeners() {
         // PayPal
         binding.cvPayPal.setOnClickListener {
+            Log.d(TAG, "PayPal clicked")
             viewModel.selectPaymentMethod(PaymentMethod.PAYPAL)
             processPayment()
         }
 
         // Tarjeta de crédito/débito
         binding.cvCard.setOnClickListener {
+            Log.d(TAG, "Credit card clicked")
             viewModel.selectPaymentMethod(PaymentMethod.CREDIT_CARD)
             processPayment()
         }
 
         // Yape
         binding.cvYape.setOnClickListener {
+            Log.d(TAG, "Yape clicked")
             viewModel.selectPaymentMethod(PaymentMethod.YAPE)
             processPayment()
         }
 
         // Plin
         binding.cvPLin.setOnClickListener {
+            Log.d(TAG, "Plin clicked")
             viewModel.selectPaymentMethod(PaymentMethod.PLIN)
             processPayment()
         }
@@ -170,6 +197,8 @@ class PayFragment : Fragment() {
         val customerPhone = "+51 999 999 999" // En producción vendría del perfil del usuario
         val description = "Compra en Ravvisant - ${binding.tvProductos.text}"
 
+        Log.d(TAG, "Processing payment: amount=$currentAmount, description=$description")
+
         viewModel.processPayment(
             amount = currentAmount,
             description = description,
@@ -178,15 +207,27 @@ class PayFragment : Fragment() {
         )
     }
 
-    private fun updatePaymentMethodSelection(selectedMethod: PaymentMethod) {
-        // Resetear todos los estilos
+    private fun showLoading(show: Boolean) {
+        binding.progressBar.visibility = if (show) View.VISIBLE else View.GONE
+        
+        // Deshabilitar/habilitar botones durante el loading
+        binding.cvPayPal.isEnabled = !show
+        binding.cvCard.isEnabled = !show
+        binding.cvYape.isEnabled = !show
+        binding.cvPLin.isEnabled = !show
+        
+        Log.d(TAG, "Loading state: $show")
+    }
+
+    private fun updatePaymentMethodSelection(method: PaymentMethod) {
+        // Reset all selections
         binding.cvPayPal.alpha = 0.7f
         binding.cvCard.alpha = 0.7f
         binding.cvYape.alpha = 0.7f
         binding.cvPLin.alpha = 0.7f
 
-        // Resaltar el método seleccionado
-        when (selectedMethod) {
+        // Highlight selected method
+        when (method) {
             PaymentMethod.PAYPAL -> binding.cvPayPal.alpha = 1.0f
             PaymentMethod.CREDIT_CARD -> binding.cvCard.alpha = 1.0f
             PaymentMethod.YAPE -> binding.cvYape.alpha = 1.0f
@@ -195,39 +236,49 @@ class PayFragment : Fragment() {
     }
 
     private fun showPaymentDialog(response: com.proyect.ravvisant.domain.model.PaymentResponse) {
-        val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_yape_qr, null)
-        val dialog = AlertDialog.Builder(requireContext())
-            .setView(dialogView)
-            .setCancelable(false)
-            .create()
-
-        dialog.show()
-    }
-
-    private fun showPaymentSuccessDialog() {
+        val message = response.message ?: "Pago procesado"
+        
         AlertDialog.Builder(requireContext())
-            .setTitle("¡Pago Exitoso!")
-            .setMessage("Tu pago ha sido procesado correctamente. Recibirás una confirmación por email.")
-            .setPositiveButton("Aceptar") { _, _ ->
-                // Navegar a la pantalla de confirmación o limpiar el carrito
+            .setTitle("Pago Procesado")
+            .setMessage(message)
+            .setPositiveButton("OK") { _, _ ->
+                // Navegar a la pantalla de confirmación
                 navigateToSuccess()
             }
             .setCancelable(false)
             .show()
     }
 
-    private fun showLoading(show: Boolean) {
-        // Aquí podrías mostrar un ProgressBar o similar
-        if (show) {
-            Toast.makeText(context, "Procesando pago...", Toast.LENGTH_SHORT).show()
-        }
+    private fun showPaymentSuccessDialog() {
+        AlertDialog.Builder(requireContext())
+            .setTitle("¡Pago Exitoso!")
+            .setMessage("Tu pago ha sido procesado correctamente. Gracias por tu compra.")
+            .setPositiveButton("Continuar") { _, _ ->
+                navigateToSuccess()
+            }
+            .setCancelable(false)
+            .show()
+    }
+
+    private fun showErrorDialog(message: String) {
+        AlertDialog.Builder(requireContext())
+            .setTitle("Error en el Pago")
+            .setMessage(message)
+            .setPositiveButton("OK") { _, _ ->
+                // Reset payment state
+                viewModel.resetPaymentState()
+            }
+            .setCancelable(true)
+            .show()
     }
 
     private fun openPaymentApp(url: String) {
         try {
+            Log.d(TAG, "Opening payment app with URL: $url")
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
             startActivity(intent)
         } catch (e: Exception) {
+            Log.e(TAG, "Error opening payment app", e)
             Toast.makeText(context, "No se pudo abrir la aplicación de pago", Toast.LENGTH_SHORT).show()
         }
     }
@@ -247,6 +298,8 @@ class PayFragment : Fragment() {
     private fun setupPayPal() {
         // Validar configuración de PayPal
         val validation = PayPalUtils.validateConfiguration()
+        Log.d(TAG, "PayPal validation: ${validation.getSummary()}")
+        
         if (!validation.isValid) {
             // Deshabilitar PayPal si no está configurado
             binding.cvPayPal.isEnabled = false
@@ -254,35 +307,52 @@ class PayFragment : Fragment() {
             Toast.makeText(context, "PayPal no está configurado correctamente", Toast.LENGTH_SHORT).show()
 
             // Log de errores para debugging
-            Log.e("PayFragment", validation.getSummary())
+            Log.e(TAG, validation.getSummary())
         } else if (validation.hasWarnings()) {
             // Mostrar advertencias pero permitir uso
-            Log.w("PayFragment", validation.getSummary())
+            Log.w(TAG, validation.getSummary())
+        } else {
+            Log.d(TAG, "PayPal configuration is valid")
         }
     }
 
     private fun createPayPalOrder(paymentRequest: com.proyect.ravvisant.domain.model.PaymentRequest) {
         // Validar el monto
         if (!PayPalUtils.isValidAmount(paymentRequest.amount)) {
+            Log.e(TAG, "Invalid amount for PayPal: ${paymentRequest.amount}")
             Toast.makeText(context, "Monto inválido para PayPal", Toast.LENGTH_SHORT).show()
             return
         }
 
+        Log.d(TAG, "Creating PayPal order for amount: ${paymentRequest.amount}")
+        
         // Crear orden de PayPal usando el ViewModel
         viewModel.createPayPalOrder(paymentRequest)
     }
 
     private fun openPayPalInBrowser(url: String) {
         try {
+            Log.d(TAG, "Opening PayPal in browser: $url")
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
             startActivity(intent)
         } catch (e: Exception) {
+            Log.e(TAG, "Error opening PayPal in browser", e)
             Toast.makeText(context, "No se pudo abrir PayPal en el navegador", Toast.LENGTH_SHORT).show()
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        Log.d(TAG, "PayFragment resumed")
+        
+        // Verificar si el usuario regresó de PayPal
+        // Aquí podrías implementar la lógica para verificar el estado del pago
+        // cuando el usuario regresa de PayPal
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
+        Log.d(TAG, "PayFragment destroyed")
         _binding = null
     }
 } 

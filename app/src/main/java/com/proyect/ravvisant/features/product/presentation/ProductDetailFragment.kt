@@ -4,13 +4,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.proyect.ravvisant.core.common.loadImage
 import com.proyect.ravvisant.databinding.FragmentProductDetailBinding
 import com.proyect.ravvisant.features.product.viewmodel.ProductDetailViewModel
 import com.proyect.ravvisant.features.product.adapters.ProductThumbnailAdapter
+import com.proyect.ravvisant.domain.model.CartItem
+import com.proyect.ravvisant.features.cart.viewmodel.CartViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -21,6 +25,7 @@ class ProductDetailFragment : Fragment() {
 
     private val viewModel: ProductDetailViewModel by viewModels()
     private lateinit var thumbnailAdapter: ProductThumbnailAdapter
+    private val cartViewModel: CartViewModel by activityViewModels()
 
     companion object {
         private const val ARG_PRODUCT_ID = "productId"
@@ -52,6 +57,23 @@ class ProductDetailFragment : Fragment() {
 
         setupProductImagesRecyclerView()
         observeViewModel()
+
+        binding.btnAddToCart.setOnClickListener {
+            val product = viewModel.product.value
+            if (product != null) {
+                val cartItem = CartItem(
+                    id = product.id,
+                    name = product.name,
+                    imageUrl = product.imageUrl,
+                    price = product.price,
+                    quantity = 1
+                )
+                cartViewModel.addToCart(cartItem)
+                Toast.makeText(requireContext(), "Producto agregado al carrito", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(requireContext(), "No se pudo agregar el producto", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     private fun setupProductImagesRecyclerView() {

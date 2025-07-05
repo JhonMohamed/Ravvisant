@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Ravvisant</string>
+    <string name="name_app">Jewelry Ravvisant</string>
+
+    <!-- Login & Register -->
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="full_name">Full Name</string>
+    <string name="enteryour_account">Log in to your account</string>
+    <string name="create_account">Create Account</string>
+    <string name="enteryour_account_google">Continue with Google</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="forgot_password">Forgot your password?</string>
+    <string name="already_have_account">Already have an account?</string>
+    <string name="dont_have_account">Don\'t have an account?</string>
+    <string name="default_web_client_id">764479280018-dgavvj753m8ej22ct2hojo9musur75lf.apps.googleusercontent.com</string>
+    <string name="theme_light">Light Mode</string>
+    <string name="theme_dark">Dark Mode</string>
+
+    <!-- Navigation -->
+    <string name="home">Home</string>
+    <string name="buscar">Search</string>
+    <string name="favorites">Favorites</string>
+    <string name="cart">Cart</string>
+    <string name="profile">Profile</string>
+
+    <!-- Categories -->
+    <string name="category_rings">Rings</string>
+    <string name="category_necklaces">Necklaces</string>
+    <string name="category_earrings">Earrings</string>
+    <string name="category_bracelets">Bracelets</string>
+
+    <!-- Cart -->
+    <string name="add_to_cart">Add to Cart</string>
+    <string name="remove_from_cart">Remove from Cart</string>
+    <string name="checkout">Checkout</string>
+    <string name="empty_cart">Your cart is empty</string>
+    <string name="total">Total:</string>
+
+    <!-- Profile -->
+    <string name="edit_profile">Edit Profile</string>
+    <string name="my_pedits">My Orders</string>
+    <string name="logout">Logout</string>
+    <string name="location">Location</string>
+    <string name="notifications">Notifications</string>
+    <string name="help">Help &amp; Support</string>
+    <string name="theme">Light Mode</string>
+    <string name="update_location">Update Location</string>
+    <string name="exit">Logout</string>
+
+    <!-- Payments -->
+    <string name="methods_pago">Payment Method</string>
+    <string name="pay_with_paypal">Pay with PayPal</string>
+    <string name="payment_success">Payment Successful!</string>
+    <string name="payment_failed">Payment Failed</string>
+    <string name="resumen_pay">Order Summary</string>
+    <string name="send_product">Shipping</string>
+    <string name="select_method_pay">Select your payment method</string>
+
+    <!-- Payment Methods -->
+    <string name="paypal">PayPal</string>
+    <string name="description_paypal">Pay securely with your PayPal account</string>
+    <string name="card_debit_or_credit">Credit/Debit Card</string>
+    <string name="description_card">Visa, Mastercard, American Express</string>
+    <string name="yape">Yape</string>
+    <string name="description_yape">Instant mobile payment</string>
+    <string name="plin">Plin</string>
+    <string name="description_plin">Mobile bank transfer</string>
+
+    <!-- Validations / Errors -->
+    <string name="field_required">This field is required</string>
+    <string name="invalid_email">Invalid email</string>
+    <string name="passwords_do_not_match">Passwords do not match</string>
+    <string name="min_password_length">Minimum 6 characters</string>
+
+    <!-- Our Locations -->
+    <string name="locations">Our Locations</string>
+    <string name="horary">Mon-Sat: 9:00 AM - 8:00 PM</string>
+    <string name="number_phone">+51 986 310 261</string>
+    <string name="details_send">Delivery Details</string>
+    <string name="distrito">District</string>
+    <string name="location_full">Full Address</string>
+    <string name="phone_call">Contact Phone</string>
+    <string name="add_notifications">Additional Notes (optional)</string>
+    <string name="intructions">Special delivery instructions.....</string>
+
+    <!-- Miscellaneous -->
+    <string name="search">Search</string>
+    <string name="loading">Loading...</string>
+    <string name="try_again">Try Again</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
